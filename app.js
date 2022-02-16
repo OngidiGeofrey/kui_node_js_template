@@ -3,6 +3,9 @@ const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
 const helmet = require('helmet');
+const http = require('http');
+const https = require('https');
+const fs = require('fs');
 const configs = require('./config.json');
 const app = express();
 
@@ -58,6 +61,27 @@ app.use((err, req, res, next) => {
 
 // Run the server
 const port = process.env.PORT || configs.port;
-app.listen(port, () =>
-	console.log(`🐹 app listening on http://localhost:${port}`)
-);
+// app.listen(port, () =>
+// 	console.log(`🐹 app listening on http://localhost:${port}`)
+// );
+
+var  privateKey, certificate, caBundle;
+
+try {
+	if (fs.existsSync('/etc/pki/tls/private/marketplace-api.chamasoft.com.key')) {
+		privateKey = fs.readFileSync('/etc/pki/tls/private/marketplace-api.chamasoft.com.key', 'utf8');
+		certificate = fs.readFileSync('/etc/pki/tls/certs/marketplace-api.chamasoft.com.cert', 'utf8');
+		caBundle = fs.readFileSync('/etc/pki/tls/certs/marketplace-api.chamasoft.com.bundle', 'utf8');
+	} 
+} catch (error) {
+	console.log("Running node.js on local server.");
+};
+
+var certificate_options = { key: privateKey, cert: certificate, ca: caBundle };
+
+var httpServer = http.createServer(app);
+var httpsServer = https.createServer(certificate_options,app);
+httpServer.listen(process.env.PORT);
+httpsServer.listen(configs.port);
+console.log(`🐹 app listening on http://localhost:${port}`);
+
