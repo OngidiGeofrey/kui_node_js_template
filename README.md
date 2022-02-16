@@ -94,7 +94,7 @@ POST http://localhost:3333/tasks/send-email [ send test email ]
 
 POST http://localhost:3333/user/sign-up [ sign up ]
 
-GET http://localhost:3333/user/signup/verify/d8f7e98b395974af9cb206baa5a6a210 [ verify signup link ]
+GET http://localhost:3333/user/sign-up/verify/d8f7e98b395974af9cb206baa5a6a210 [ verify signup link ]
 
 POST http://localhost:3333/user/login [ log in ]
 
