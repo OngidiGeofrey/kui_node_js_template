@@ -5,7 +5,7 @@
         "user": "sandbox_apitemplate",
         "password": "APITemplate@2022!",
         "database": "sandbox_apitemplate",
-        "migrate": "TRUE"
+        "migrate": "FALSE"
     },
     "emailFrom": "project@digitalvisionea.com",
     "smtpOptions": {
