@@ -1,16 +1,16 @@
 ###
 # Get all tasks
-GET http://localhost:3333/tasks HTTP/1.1
+POST http://localhost:3333/tasks HTTP/1.1
 content-type: application/json
 
 ###
 # Get single task
-GET http://localhost:3333/tasks/2 HTTP/1.1
+POST http://localhost:3333/tasks/2 HTTP/1.1
 content-type: application/json
 
 ###
 # Create new task
-POST http://localhost:3333/tasks HTTP/1.1
+POST http://localhost:3333/tasks/create HTTP/1.1
 content-type: application/json
 
 {
@@ -19,7 +19,7 @@ content-type: application/json
 
 ###
 # Update task
-PUT http://localhost:3333/tasks HTTP/1.1
+POST http://localhost:3333/tasks/update/2 HTTP/1.1
 content-type: application/json
 
 {
@@ -30,7 +30,7 @@ content-type: application/json
 
 ###
 # Delete task
-DELETE http://localhost:3333/tasks HTTP/1.1
+POST http://localhost:3333/tasks/delete/2 HTTP/1.1
 content-type: application/json
 
 {
@@ -39,7 +39,7 @@ content-type: application/json
 
 ###
 # Upload Picture
-POST http://localhost:3333/tasks/update_picture HTTP/1.1
+POST http://localhost:3333/tasks/update-picture HTTP/1.1
 Content-Type: multipart/form-data; boundary=MyBoundary
 
 --MyBoundary
@@ -56,7 +56,7 @@ Content-Type: image/jpg
 
 ###
 # Send email
-POST http://localhost:3333/tasks/send_email HTTP/1.1
+POST http://localhost:3333/tasks/send-email HTTP/1.1
 content-type: application/json
 
 {

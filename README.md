@@ -66,11 +66,11 @@ or simply use Postman tool to test all the API endpoints.
 ## Features
 
 - Database configurations using Sequelize
-- Implementation of Email script (using mailtrap.io)
+- Implementation of Email script (using nodemailer)
 - Full CRUD code using TODO List
 - Image upload feature implementation
 - Data validations using Yup library
-- Auth features that includes Signup, Login, Forgot Password, Update Profile, Change Password
+- Auth features that includes Sign up, Login, Forgot Password, Update Profile, Change Password
 - Proper error handling using Middlewares
 - API security using cors and helmet packages
 
@@ -78,40 +78,40 @@ or simply use Postman tool to test all the API endpoints.
 
 ## API Endpoints
 
-GET http://localhost:3333/tasks [ get all tasks ]
+POST http://localhost:3333/tasks [ get all tasks ]
 
-GET http://localhost:3333/tasks/1 [ get single task ]
+POST http://localhost:3333/tasks/get/1 [ get single task ]
 
-POST http://localhost:3333/tasks [ create new task ]
+POST http://localhost:3333/tasks/create [ create new task ]
 
-PUT http://localhost:3333/tasks [ update task ]
+POST http://localhost:3333/tasks/update/1 [ update task ]
 
-DELETE http://localhost:3333/tasks [ delete task ]
+POST http://localhost:3333/tasks/delete/1 [ delete task ]
 
-POST http://localhost:3333/tasks/update_picture [ update picture ]
+POST http://localhost:3333/tasks/update-picture [ update picture ]
 
-POST http://localhost:3333/tasks/send_email [ send test email ]
+POST http://localhost:3333/tasks/send-email [ send test email ]
 
-POST http://localhost:3333/user/signup [ sign up ]
+POST http://localhost:3333/user/sign-up [ sign up ]
 
 GET http://localhost:3333/user/signup/verify/d8f7e98b395974af9cb206baa5a6a210 [ verify signup link ]
 
 POST http://localhost:3333/user/login [ log in ]
 
-GET http://localhost:3333/user [ get logged in user ]
+POST http://localhost:3333/user/get-user [ get logged in user ]
 
-POST http://localhost:3333/user/update_profile [ update profile ]
+POST http://localhost:3333/user/update-profile [ update profile ]
 
-POST http://localhost:3333/user/change_password [ change password ]
+POST http://localhost:3333/user/change-password [ change password ]
 
-POST http://localhost:3333/user/forgot_password [ forgot password ]
+POST http://localhost:3333/user/forgot-password [ forgot password ]
 
-GET http://localhost:3333/user/forgot_password/verify/d5d5199258fed2cc151d2bb3e18f589a [ verify forgot password link ]
+GET http://localhost:3333/user/forgot-password/verify/d5d5199258fed2cc151d2bb3e18f589a [ verify forgot password link ]
 
-POST http://localhost:3333/user/reset_password [ reset password ]
+POST http://localhost:3333/user/reset-password [ reset password ]
 
 <br />
 
 ## TODO
 
-- [ ] Add tasks here
+- [ ] Add Swagger Documentation

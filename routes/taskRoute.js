@@ -26,7 +26,7 @@ router.post(
 	tasksController.update
 );
 router.post('/tasks/delete/:id', [validationDelete], tasksController.delete);
-router.post('/tasks/update_picture', tasksController.updatePicture);
-router.post('/tasks/send_email', tasksController.sendEmail);
+router.post('/tasks/update-picture', tasksController.updatePicture);
+router.post('/tasks/send-email', tasksController.sendEmail);
 
 module.exports = router;
