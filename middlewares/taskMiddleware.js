@@ -70,7 +70,7 @@ module.exports.validationUpdate = (req, res, next) => {
 	schemaUpdate
 		.validate(
 			{
-				id: req.body.id,
+				id: req.params.id,
 				task: req.body.task,
 			},
 			{ abortEarly: false }
@@ -122,7 +122,7 @@ module.exports.validationDelete = (req, res, next) => {
 	schemaDelete
 		.validate(
 			{
-				id: req.body.id,
+				id: req.params.id,
 			},
 			{ abortEarly: false }
 		)

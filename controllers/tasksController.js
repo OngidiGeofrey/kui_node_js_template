@@ -46,7 +46,6 @@ module.exports.create = async (req, res, next) => {
 		const record = await Task.create({
 			task: task,
 		});
-
 		res.json({
 			status: 'success',
 			result: {
@@ -61,7 +60,7 @@ module.exports.create = async (req, res, next) => {
 // Update
 module.exports.update = async (req, res, next) => {
 	try {
-		const id = req.body.id;
+		const id = req.params.id;
 		const task = req.body.task;
 		const status = req.body.status;
 
@@ -93,7 +92,7 @@ module.exports.update = async (req, res, next) => {
 // Delete
 module.exports.delete = async (req, res, next) => {
 	try {
-		const id = req.body.id;
+		const id = req.params.id;
 
 		const deleted = await Task.destroy({
 			where: {

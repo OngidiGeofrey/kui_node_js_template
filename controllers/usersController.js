@@ -13,6 +13,8 @@ const jwt = require('jsonwebtoken');
 module.exports.signUp = async (req, res, next) => {
 	try {
 		const email = req.body.email;
+		const first_name = req.body.first_name;
+		const last_name = req.body.last_name;
 
 		// encrypt password
 		var salt = bcrypt.genSaltSync(10);
@@ -25,6 +27,8 @@ module.exports.signUp = async (req, res, next) => {
 			email: email,
 			password: password,
 			token: token,
+			first_name: first_name,
+			last_name: last_name,
 		});
 
 		// Send the email
@@ -171,6 +175,54 @@ module.exports.getLoggedInUser = (req, res, next) => {
 	}
 };
 
+//Generate Refresh Token
+module.exports.refreshToken = async (req, res, next) => {
+	try {
+		const token = req.headers.authorization;
+		if (token) {
+			// verifies secret and checks if the token is expired
+			jwt.verify(
+				token.replace(/^Bearer\s/, ''),
+				process.env.AUTH_SECRET,
+				(err, decoded) => {
+					let user = decoded;
+					if (err) {
+						let err = new Error('Unauthorized');
+						err.field = 'login';
+						return next(err);
+					} else {
+						const refreshToken = jwt.sign(
+							{
+								id: user.id,
+								email: user.email,
+								first_name: user.first_name,
+								last_name: user.last_name,
+								bio: user.bio,
+							},
+							process.env.AUTH_SECRET,
+							{
+								expiresIn: '2h',
+							}
+						);
+						return res.json({
+							status: 'success',
+							token: refreshToken,
+						});
+					}
+				}
+			);
+		} else {
+			let err = new Error('Unauthorized');
+			err.field = 'login';
+			return next(err);
+		}
+	} catch (err) {
+		return next(err);
+	}
+};
+
+
+
 // Update Profile
 module.exports.updateProfile = async (req, res, next) => {
 	try {
@@ -259,12 +311,19 @@ module.exports.forgotPassword = async (req, res, next) => {
 		// Send the email
 		var transporter = nodemailer.createTransport({
 			host: process.env.MAIL_HOST,
-			port: process.env.MAIL_POST,
+			port: process.env.MAIL_PORT,
 			auth: {
 				user: process.env.MAIL_AUTH_USER,
 				pass: process.env.MAIL_AUTH_PASS,
 			},
 		});
+
+		console.log(process.env.MAIL_HOST);
+		console.log(process.env.MAIL_PORT);
+		console.log(process.env.MAIL_AUTH_USER);
+		console.log(process.env.MAIL_AUTH_PASS);
+		console.log(process.env.MAIL_FROM);
+		console.log(email);
 
 		var verificationLink = `${process.env.CLIENT_URL}/forgot-password-verify/?token=${token}`;
 

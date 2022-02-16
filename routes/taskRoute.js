@@ -13,19 +13,19 @@ const {
 // Import Controllers
 const tasksController = require('../controllers/tasksController');
 
-router.get('/tasks', tasksController.getAll);
-router.get('/tasks/:id', tasksController.getOne);
+router.post('/tasks', tasksController.getAll);
+router.post('/tasks/get/:id', tasksController.getOne);
 router.post(
-	'/tasks',
+	'/tasks/create',
 	[validationCreate, isTaskExistsCreate],
 	tasksController.create
 );
-router.put(
-	'/tasks',
+router.post(
+	'/tasks/update/:id',
 	[validationUpdate, isTaskExistsUpdate],
 	tasksController.update
 );
-router.delete('/tasks', [validationDelete], tasksController.delete);
+router.post('/tasks/delete/:id', [validationDelete], tasksController.delete);
 router.post('/tasks/update_picture', tasksController.updatePicture);
 router.post('/tasks/send_email', tasksController.sendEmail);
 
