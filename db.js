@@ -1,10 +1,11 @@
 require('dotenv').config();
 const { Sequelize } = require('sequelize');
+const configs = require('./config.json');
 
 const sequelize = new Sequelize(
-	process.env.DB_NAME,
-	process.env.DB_USER,
-	process.env.DB_PASSWORD,
+	process.env.DB_NAME || configs.database.database,
+	process.env.DB_USER || configs.database.user,
+	process.env.DB_USER ? process.env.DB_PASSWORD : configs.database.password,
 	{
 		host: 'localhost',
 		dialect: 'mysql' /* 'mysql' | 'mariadb' | 'postgres' | 'mssql' */,
@@ -27,7 +28,8 @@ const Task = TaskModel(sequelize);
 const { UserModel } = require('./models/User');
 const User = UserModel(sequelize);
 
-if (process.env.MIGRATE_DB == 'TRUE') {
+const migrateDb = process.env.MIGRATE_DB || configs.database.migrate;
+if ( migrateDb == 'TRUE') {
 	sequelize.sync().then(() => {
 		console.log(`All tables synced!`);
 		process.exit(0);
