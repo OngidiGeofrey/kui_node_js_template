@@ -3,7 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
 const helmet = require('helmet');
-
+const configs = require('./config.json');
 const app = express();
 
 app.use(helmet());
@@ -57,7 +57,7 @@ app.use((err, req, res, next) => {
 });
 
 // Run the server
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || configs.port;
 app.listen(port, () =>
 	console.log(`🐹 app listening on http://localhost:${port}`)
 );

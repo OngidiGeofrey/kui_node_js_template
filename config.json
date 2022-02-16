@@ -7,6 +7,7 @@
         "database": "sandbox_apitemplate",
         "migrate": "FALSE"
     },
+    "port": 8333,
     "emailFrom": "project@digitalvisionea.com",
     "smtpOptions": {
         "host": "rcentral508.webserversystems.com",
