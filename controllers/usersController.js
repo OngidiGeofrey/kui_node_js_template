@@ -40,7 +40,7 @@ module.exports.signUp = async (req, res, next) => {
 				pass: process.env.MAIL_AUTH_PASS || configs.smtpOptions.auth.pass,
 			},
 		});
-		var verificationLink = `${process.env.CLIENT_URL}/signup-verify/?token=${token}`;
+		var verificationLink = `${ process.env.CLIENT_URL || configs.clientURL }/signup-verify/?token=${token}`;
 
 		var mailOptions = {
 			from: process.env.MAIL_FROM || configs.smtpOptions.from,

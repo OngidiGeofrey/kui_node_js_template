@@ -8,6 +8,7 @@
         "migrate": "FALSE"
     },
     "port": 8333,
+    "clientURL": "https://apitemplate.sandbox.co.ke:8333",
     "emailFrom": "project@digitalvisionea.com",
     "smtpOptions": {
         "host": "rcentral508.webserversystems.com",
