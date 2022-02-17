@@ -8,7 +8,7 @@ const nodemailer = require('nodemailer');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
-const configs = require('./config.json');
+const configs = require('../config.json');
 // SignUp
 module.exports.signUp = async (req, res, next) => {
 	try {
