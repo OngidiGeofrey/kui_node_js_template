@@ -8,7 +8,7 @@ const nodemailer = require('nodemailer');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
-
+const configs = require('./config.json');
 // SignUp
 module.exports.signUp = async (req, res, next) => {
 	try {
@@ -33,17 +33,17 @@ module.exports.signUp = async (req, res, next) => {
 
 		// Send the email
 		var transporter = nodemailer.createTransport({
-			host: process.env.MAIL_HOST,
-			port: process.env.MAIL_POST,
+			host: process.env.MAIL_HOST || configs.smtpOptions.host ,
+			port: process.env.MAIL_POST || configs.smtpOptions.port,
 			auth: {
-				user: process.env.MAIL_AUTH_USER,
-				pass: process.env.MAIL_AUTH_PASS,
+				user: process.env.MAIL_AUTH_USER || configs.smtpOptions.auth.user,
+				pass: process.env.MAIL_AUTH_PASS || configs.smtpOptions.auth.pass,
 			},
 		});
 		var verificationLink = `${process.env.CLIENT_URL}/signup-verify/?token=${token}`;
 
 		var mailOptions = {
-			from: process.env.MAIL_FROM,
+			from: process.env.MAIL_FROM || configs.smtpOptions.from,
 			to: email,
 			subject: 'Thank you for signing up',
 			html: `Congratulations!<br/><br/>
