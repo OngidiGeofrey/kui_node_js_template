@@ -131,7 +131,7 @@ module.exports.login = async (req, res, next) => {
 				};
 				return res.json({
 					user: userData,
-					token: jwt.sign(userData, process.env.AUTH_SECRET, {
+					token: jwt.sign(userData, process.env.AUTH_SECRET || configs.authSecret, {
 						expiresIn: '2h',
 					}), // Expires in 2 Hour
 				});
@@ -157,7 +157,7 @@ module.exports.getLoggedInUser = (req, res, next) => {
 		// verifies secret and checks if the token is expired
 		jwt.verify(
 			token.replace(/^Bearer\s/, ''),
-			process.env.AUTH_SECRET,
+			process.env.AUTH_SECRET || configs.authSecret,
 			(err, decoded) => {
 				if (err) {
 					let err = new Error('Unauthorized');
@@ -183,7 +183,7 @@ module.exports.refreshToken = async (req, res, next) => {
 			// verifies secret and checks if the token is expired
 			jwt.verify(
 				token.replace(/^Bearer\s/, ''),
-				process.env.AUTH_SECRET,
+				process.env.AUTH_SECRET  || configs.authSecret,
 				(err, decoded) => {
 					let user = decoded;
 					if (err) {
@@ -199,7 +199,7 @@ module.exports.refreshToken = async (req, res, next) => {
 								last_name: user.last_name,
 								bio: user.bio,
 							},
-							process.env.AUTH_SECRET,
+							process.env.AUTH_SECRET  || configs.authSecret,
 							{
 								expiresIn: '2h',
 							}

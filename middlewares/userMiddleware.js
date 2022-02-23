@@ -2,7 +2,7 @@ let yup = require('yup');
 const jwt = require('jsonwebtoken');
 const { User } = require('../db');
 const { Op } = require('sequelize');
-
+const configs = require('../config.json');
 // ========================================================================
 
 // Schema - Signup
@@ -105,7 +105,7 @@ module.exports.authenticateToken = (req, res, next) => {
 		// verifies secret and checks if the token is expired
 		jwt.verify(
 			token.replace(/^Bearer\s/, ''),
-			process.env.AUTH_SECRET,
+			process.env.AUTH_SECRET || configs.authSecret,
 			(err, decoded) => {
 				if (err) {
 					let err = new Error('Unauthorized');
