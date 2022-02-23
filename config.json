@@ -9,13 +9,13 @@
     },
     "port": 8333,
     "clientURL": "https://apitemplate.sandbox.co.ke:8333",
-    "emailFrom": "test@code-logs.com",
+    "emailFrom": "project@digitalvisionea.com",
     "smtpOptions": {
-        "host": "code-logs.com",
+        "host": "rcentral508.webserversystems.com",
         "port": 465,
         "auth": {
-            "user": "test@code-logs.com",
-            "pass": "Test@2014!"
+            "user": "project@digitalvisionea.com",
+            "pass": "lkm@2020!"
         }
     }
 }
