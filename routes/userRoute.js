@@ -28,6 +28,7 @@ router.get('/user/sign-up/verify/:token', usersController.signUpVerify); // veri
 router.post('/user/refresh-token',[authenticateToken], usersController.refreshToken); // verify user link when clicked
 router.post('/user/login', [validateLogin], usersController.login);
 router.post('/user/get-user', [authenticateToken], usersController.getLoggedInUser); // get logged in user
+router.post('/user/get-user', [authenticateToken], usersController.getAll); // get all users
 router.post(
 	'/user/update-profile',
 	[authenticateToken, validationUpdateProfile, isUserExistsUpdate],

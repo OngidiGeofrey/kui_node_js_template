@@ -193,7 +193,7 @@ module.exports.sendEmail = async (req, res, next) => {
 
 		var mailOptions = {
 			from: process.env.MAIL_FROM,
-			to: 'test@example.com',
+			to: 'samuel.wahome@gmail.com',
 			subject: 'Test email',
 			html: `Hi there! <br/><br/>
 			This is just a test email from boilerplate code<br/><br/>

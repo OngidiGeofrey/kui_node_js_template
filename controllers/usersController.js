@@ -318,12 +318,7 @@ module.exports.forgotPassword = async (req, res, next) => {
 			},
 		});
 
-		console.log(process.env.MAIL_HOST);
-		console.log(process.env.MAIL_PORT);
-		console.log(process.env.MAIL_AUTH_USER);
-		console.log(process.env.MAIL_AUTH_PASS);
-		console.log(process.env.MAIL_FROM);
-		console.log(email);
+	
 
 		var verificationLink = `${process.env.CLIENT_URL}/forgot-password-verify/?token=${token}`;
 
@@ -400,6 +395,20 @@ module.exports.resetPassword = async (req, res, next) => {
 		return res.json({
 			status: 'success',
 			result: result,
+		});
+	} catch (err) {
+		return next(err);
+	}
+};
+
+
+// Get All
+module.exports.getAll = async (req, res, next) => {
+	try {
+		const users = await User.findAll();
+		res.json({
+			status: 'success',
+			result: users,
 		});
 	} catch (err) {
 		return next(err);
