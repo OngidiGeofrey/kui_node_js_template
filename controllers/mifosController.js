@@ -138,3 +138,48 @@ module.exports.client_summary = async (req, res, next) => {
 		return next(err);
 	}
 };
+
+
+
+// withdraw loan application
+module.exports.withdraw_loan_application = async (req, res, next) => {
+	try {
+		
+		let loan__id=req.params.id;
+		let note=req.body.reason;
+		
+		const today = new Date();
+		const day = today.getDate()        // 24
+		const month = today.getMonth()     // 10 (Month is 0-based, so 10 means 11th Month)
+	  	const year = today.getFullYear()
+		
+		const withdrawal_date=day+' '+today.toLocaleString('en-US', { month: 'long' })+' '+year;
+		console.log(withdrawal_date);	//2022
+		const base64AunthenticationKey = req.headers["access_token"];
+		
+		const url = `${process.env.MIFOS_URL}/${loan__id}?command=withdrawnByApplicant`;
+		await Axios({
+			method: "POST",
+			url: url,
+			headers: {
+				"Content-Type": "application/json",
+				"Fineract-Platform-TenantId": `${process.env.MIFOS_TENANT_ID}`,
+				"Authorization": 'Basic '+base64AunthenticationKey
+			},
+			body:{
+				"locale": "en",
+				"dateFormat": "dd MMMM yyyy",
+				"withdrawnOnDate": `${withdrawal_date}`,
+				"note": `${note}`
+			}
+		}).then((response) => {
+			res.json({
+				status: "success",
+				result: response.data,
+			});
+		});
+		console.log("Route exists");
+	} catch (err) {
+		return next(err);
+	}
+};

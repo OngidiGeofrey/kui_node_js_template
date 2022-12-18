@@ -3,7 +3,7 @@ const router = Router();
 const axios = require('axios');
 const {login} = require('../controllers/mifosController');
 
-router.post('/mifos-login', login);
+
 // router.post('/mifos-register', mifosController.register);
 const mifosController = require('../controllers/mifosController');
 //loan products listing 
@@ -20,4 +20,7 @@ router.post('/loans/client/:id',mifosController.client_accounts);
 
 //list client  loan summary details
 router.post('/client/summary/:id',mifosController.client_summary);
+
+//withdraw a loan
+router.post('/loans/withdraw/:id',mifosController.withdraw_loan_application);
 module.exports = router;
