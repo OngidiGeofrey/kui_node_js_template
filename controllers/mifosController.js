@@ -164,3 +164,38 @@ module.exports.createClient = async (req, res, next) => {
 	}
 
 };
+
+module.exports.makeLoanRepayment = async (req, res, next) => {
+	try {
+		const body = req.body;
+		const data = {
+			locale: "en",
+			transactionDate: new Date().toLocaleDateString("en-GB", {
+				day: "numeric",
+				month: "long",
+				year: "numeric",
+			}),
+			paymentTypeId: 2,
+			note: "Repayment",
+			amount: body.amount,
+		};
+
+		const repayment = await Axios({
+			method: "post",
+			url: `${process.env.MIFOS_URL}/fineract-provider/api/v1/loans/${body.loanId}/transactions`,
+			headers: {
+				"Content-Type": "application/json",
+				"Fineract-Platform-TenantId": `${process.env.MIFOS_TENANT_ID}`,
+					"authorization": `BASIC ${req.headers.authorization}`
+			},
+			data: data,
+		});
+		return res.json({
+			status: "success",
+			result: repayment.data,
+		});
+		
+	}catch{
+		return next(err);
+	}
+};
