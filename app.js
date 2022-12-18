@@ -37,8 +37,12 @@ app.get('/', (req, res, next) => {
 const taskRoute = require('./routes/taskRoute');
 const userRoute = require('./routes/userRoute');
 const mifosRoute = require('./routes/mifosRoute');
+<<<<<<< HEAD
 app.use('/api', [taskRoute, userRoute, mifosRoute]); // you can add more routes in this array
 
+=======
+app.use('/api', mifosRoute); // you can add more routes in this array
+>>>>>>> origin
 
 //404 error
 app.get('*', function (req, res) {

@@ -2,6 +2,7 @@ const { default: Axios } = require("axios");
 
 require("dotenv").config();
 
+<<<<<<< HEAD
 
 // list all loan products
 module.exports.listing = async (req, res, next) => {
@@ -11,11 +12,23 @@ module.exports.listing = async (req, res, next) => {
 		const url = `${process.env.MIFOS_URL}/loanproducts`;
 		await Axios({
 			method: "GET",
+=======
+module.exports.login = async (req, res, next) => {
+	try {
+		const username = req.body.username;
+		const password = req.body.password;
+		const url = `${process.env.MIFOS_URL}/self/authentication?username=${username}&password=${password}`;
+		await Axios({
+			method: "post",
+>>>>>>> origin
 			url: url,
 			headers: {
 				"Content-Type": "application/json",
 				"Fineract-Platform-TenantId": `${process.env.MIFOS_TENANT_ID}`,
+<<<<<<< HEAD
 				'Authorization': 'Basic '+base64AunthenticationKey
+=======
+>>>>>>> origin
 			},
 		}).then((response) => {
 			res.json({
@@ -27,6 +40,7 @@ module.exports.listing = async (req, res, next) => {
 		return next(err);
 	}
 };
+<<<<<<< HEAD
 
 // retrieve  the loan product by Id
 module.exports.get_loan_product_by_id = async (req, res, next) => {
@@ -138,3 +152,5 @@ module.exports.client_summary = async (req, res, next) => {
 		return next(err);
 	}
 };
+=======
+>>>>>>> origin
