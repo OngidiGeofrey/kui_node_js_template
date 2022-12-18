@@ -1,7 +1,7 @@
 const {Router} = require('express');
 const router = Router();
 const mifosController = require('../controllers/mifosController');
-//loan products listing endpoint
+//loan products listing 
 router.post('/loanproducts/listing',mifosController.listing);
 
 //retrieve a loan product
