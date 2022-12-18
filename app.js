@@ -34,9 +34,16 @@ app.get('/', (req, res, next) => {
 	}
 });
 
-const taskRoute = require('./routes/taskRoute');
-const userRoute = require('./routes/userRoute');
-app.use([taskRoute, userRoute]); // you can add more routes in this array
+// const taskRoute = require('./routes/taskRoute');
+// const userRoute = require('./routes/userRoute');
+const mifosRoute = require('./routes/mifosRoute');
+app.use('/api', mifosRoute); // you can add more routes in this array
+app.get('/api', (req, res, next) => {
+	res.status(200).json({
+		status: 'success',
+		message: 'Welcome 🙏',
+	}); 
+});
 
 //404 error
 app.get('*', function (req, res) {
@@ -84,5 +91,6 @@ var httpsServer = https.createServer(certificate_options,app);
 httpServer.listen(process.env.PORT);
 httpsServer.listen(configs.port);
 
-console.log(`🐹 app listening on http://localhost:${port}`);
+console.log(`🐹 app listening on http://localhost:${process.env.PORT}`);
+console.log(`🐹 app listening on https://localhost:${port}`);
 
