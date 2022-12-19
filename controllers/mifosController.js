@@ -144,7 +144,7 @@ module.exports.makeLoanRepayment = async (req, res, next) => {
 				year: "numeric",
 			}),
 			paymentTypeId: body.paymentTypeId,
-			note: "Repayment",
+			note: body.note || "Repayment",
 			transactionAmount: body.amount,
 		};
 
