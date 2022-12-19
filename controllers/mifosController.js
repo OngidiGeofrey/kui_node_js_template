@@ -24,20 +24,20 @@ module.exports.login = async (req, res, next) => {
 				},
 			});
 
-			if(!user){
+			if (!user) {
 				//create user in database
 				const newUser = await MifosUser.create({
 					userId: response.data.userId,
 					username: response.data.username,
-				}); 
+				});
 
-				console.log("New User: ",newUser)
+				console.log("New User: ", newUser);
 			}
 
 			res.json({
 				status: "success",
 				result: { ...response.data, ...user },
-				prompt: !user? "Please create client to proceed":"Login successful",
+				prompt: !user ? "Please create client to proceed" : "Login successful",
 			});
 		});
 	} catch (err) {
@@ -71,42 +71,11 @@ module.exports.register = async (req, res, next) => {
 			},
 			data: data,
 		});
-		const today = new Date().toLocaleDateString("en-GB", {
-			day: "numeric",
-			month: "long",
-			year: "numeric",
-		});
-
-		//create client in mifos
-		const clientData = {
-			officeId: 1, //req
-			firstname: body.firstname,
-			lastname: body.lastname,
-			externalId: body.externalId,
-			dateFormat: "dd MM yyyy",
-			locale: "en",
-			active: true,
-			activationDate: today,
-			submittedOnDate: today,
-			datatables: [...body.datatables] || [],
-		};
-		const clientRegister = await Axios({
-			method: "post",
-			url: `${process.env.MIFOS_URL}/fineract-provider/api/v1/clients`,
-			headers: {
-				"Content-Type": "application/json",
-				"Fineract-Platform-TenantId": `${process.env.MIFOS_TENANT_ID}`,
-				"authorization": `BASIC ${register.data.base64EncodedAuthenticationKey}}`,
-			},
-			data: clientData,
-		});
 
 		//create user in database
 		const user = await MifosUser.create({
 			userId: register.data.resourceId,
 			username: body.username,
-			clientId: clientRegister.data.clientId,
-			resourceId: register.data.resourceId,
 		});
 		return res.json({
 			status: "success",
@@ -142,9 +111,8 @@ module.exports.createClient = async (req, res, next) => {
 			url: `${process.env.MIFOS_URL}/fineract-provider/api/v1/clients`,
 			headers: {
 				"Content-Type": "application/json",
-				"Fineract-Platform-TenantId": `${process.env.MIFOS_TENANT_ID
-					}`,
-				"authorization": `BASIC ${req.headers.authorization}`,
+				"Fineract-Platform-TenantId": `${process.env.MIFOS_TENANT_ID}`,
+				authorization: `BASIC ${req.headers.authorization}`,
 			},
 			data: data,
 		});
@@ -162,7 +130,6 @@ module.exports.createClient = async (req, res, next) => {
 	} catch (err) {
 		return next(err);
 	}
-
 };
 
 module.exports.makeLoanRepayment = async (req, res, next) => {
@@ -186,7 +153,7 @@ module.exports.makeLoanRepayment = async (req, res, next) => {
 			headers: {
 				"Content-Type": "application/json",
 				"Fineract-Platform-TenantId": `${process.env.MIFOS_TENANT_ID}`,
-					"authorization": `BASIC ${req.headers.authorization}`
+				authorization: `BASIC ${req.headers.authorization}`,
 			},
 			data: data,
 		});
@@ -194,8 +161,7 @@ module.exports.makeLoanRepayment = async (req, res, next) => {
 			status: "success",
 			result: repayment.data,
 		});
-		
-	}catch{
+	} catch {
 		return next(err);
 	}
 };
