@@ -21,9 +21,6 @@ module.exports.MifosUserModel = (sequelize) => {
             clientId: {
                 type: DataTypes.STRING,
             },
-            resourceId: {
-                type: DataTypes.STRING,
-            },
         },
         {
             // Other model options go here
