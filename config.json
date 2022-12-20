@@ -7,10 +7,10 @@
         "database": "digital_lending",
         "migrate": "FALSE"
     },
-    "local_port": 9334,
     "port": 9333,
-    "mifos_url": "https://sandbox.mkmcapitalglobal.co.ke/fineract-provider/api/v1",
-    "mifos_tenant_id":"mkmsandbox",
+    "localPort": 9334,
+    "mifosUrl": "https://sandbox.mkmcapitalglobal.co.ke/fineract-provider/api/v1",
+    "mifosTenantId":"mkmsandbox",
     "clientURL": "https://lending-api.sandbox.co.ke:8333",
     "authSecret": "SilenceIsGolden",
     "emailFrom": "project@digitalvisionea.com",

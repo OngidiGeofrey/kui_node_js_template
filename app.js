@@ -85,6 +85,6 @@ var httpsServer = https.createServer(certificate_options,app);
 httpServer.listen(configs.local_port);
 httpsServer.listen(configs.port);
 
-console.log(`🐹 app listening on http://localhost:${configs.local_port}`);
+console.log(`🐹 app listening on http://localhost:${configs.localPort}`);
 console.log(`🐹 app listening on https://localhost:${configs.port}`);
 

@@ -1,6 +1,5 @@
 const { default: Axios } = require("axios");
 const config = require('../config.json');
-const { date } = require("yup");
 const { MifosUser } = require("../db");
 
 require("dotenv").config();
@@ -13,7 +12,7 @@ module.exports.login = async (req, res, next) => {
 		const password = req.body.password;
 		await Axios({
 			method: "post",
-			url: `${process.env.MIFOS_URL}/self/authentication?username=${username}&password=${password}`,
+			url: `${config.mifosUrl}/self/authentication?username=${username}&password=${password}`,
 			headers: {
 				"Content-Type": "application/json",
 				"Fineract-Platform-TenantId": `${config.mifos_tenant_id}`,
@@ -66,10 +65,10 @@ module.exports.register = async (req, res, next) => {
 		};
 		const register = await Axios({
 			method: "post",
-			url: `${process.env.MIFOS_URL}/fineract-provider/api/v1/users`,
+			url: `${config.mifosUrl}/fineract-provider/api/v1/users`,
 			headers: {
 				"Content-Type": "application/json",
-				"Fineract-Platform-TenantId": `${process.env.MIFOS_TENANT_ID}`,
+				"Fineract-Platform-TenantId": `${config.mifosTenantId}`,
 			},
 			data: data,
 		});
@@ -110,10 +109,10 @@ module.exports.createClient = async (req, res, next) => {
 		};
 		const clientRegister = await Axios({
 			method: "post",
-			url: `${process.env.MIFOS_URL}/fineract-provider/api/v1/clients`,
+			url: `${config.mifosUrl}/fineract-provider/api/v1/clients`,
 			headers: {
 				"Content-Type": "application/json",
-				"Fineract-Platform-TenantId": `${process.env.MIFOS_TENANT_ID}`,
+				"Fineract-Platform-TenantId": `${config.mifosTenantId}`,
 				authorization: `BASIC ${req.headers.authorization}`,
 			},
 			data: data,
@@ -152,10 +151,10 @@ module.exports.makeLoanRepayment = async (req, res, next) => {
 
 		const repayment = await Axios({
 			method: "post",
-			url: `${process.env.MIFOS_URL}/fineract-provider/api/v1/loans/${body.loanId}/transactions?command=repayment`,
+			url: `${config.mifosUrl}/fineract-provider/api/v1/loans/${body.loanId}/transactions?command=repayment`,
 			headers: {
 				"Content-Type": "application/json",
-				"Fineract-Platform-TenantId": `${process.env.MIFOS_TENANT_ID}`,
+				"Fineract-Platform-TenantId": `${config.mifosTenantId}`,
 				authorization: `BASIC ${req.headers.authorization}`,
 			},
 			data: data,
