@@ -15,6 +15,7 @@ const sequelize = new Sequelize(
 (async () => {
 	try {
 		await sequelize.authenticate();
+		sequelize.sync({alter: true});
 		console.log('💾 Database connection has been established successfully.');
 	} catch (error) {
 		console.error('Unable to connect to the database:', error);
@@ -28,6 +29,9 @@ const Task = TaskModel(sequelize);
 const { UserModel } = require('./models/User');
 const User = UserModel(sequelize);
 
+const { MifosUserModel } = require('./models/MifosUser');
+const MifosUser = MifosUserModel(sequelize);
+
 const migrateDb = process.env.MIGRATE_DB || configs.database.migrate;
 if ( migrateDb == 'TRUE') {
 	sequelize.sync().then(() => {
@@ -39,4 +43,5 @@ if ( migrateDb == 'TRUE') {
 module.exports = {
 	Task,
 	User,
+	MifosUser,
 };
