@@ -10,7 +10,7 @@ module.exports.login = async (req, res, next) => {
 		const password = req.body.password;
 		await Axios({
 			method: "post",
-			url: `${config.mifosUrl}/self/authentication?username=${username}&password=${password}`,
+			url: `${config.mifosUrl}/authentication?username=${username}&password=${password}`,
 			headers: {
 				"Content-Type": "application/json",
 				"Fineract-Platform-TenantId": `${config.mifosTenantId}`,
@@ -59,9 +59,9 @@ module.exports.register = async (req, res, next) => {
 			officeId: 1,
 			staffId: 1,
 			roles: [2],
-			sendPasswordToEmail: true,
-			password: "Password@123",
-			repeatPassword: "Password@123",
+			sendPasswordToEmail: false,
+			password: body.password,
+			repeatPassword: body.RepeatPassword,
 			isSelfServiceUser: true,
 		};
 		const register = await Axios({
