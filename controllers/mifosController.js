@@ -1,4 +1,6 @@
 const { default: Axios } = require("axios");
+var JSON = require('querystring');
+
 
 require("dotenv").config();
 
@@ -129,6 +131,7 @@ module.exports.client_summary = async (req, res, next) => {
 				'Authorization': 'Basic '+base64AunthenticationKey
 			},
 		}).then((response) => {
+			
 			res.json({
 				status: "success",
 				result: response.data,
@@ -157,28 +160,31 @@ module.exports.withdraw_loan_application = async (req, res, next) => {
 		console.log(withdrawal_date);	//2022
 		const base64AunthenticationKey = req.headers["access_token"];
 		
-		const url = `${process.env.MIFOS_URL}/${loan__id}?command=withdrawnByApplicant`;
+		const url = `${process.env.MIFOS_URL}/loans/${loan__id}?command=withdrawnByApplicant`;
 		await Axios({
 			method: "POST",
 			url: url,
 			headers: {
-				"Content-Type": "application/json",
+				
 				"Fineract-Platform-TenantId": `${process.env.MIFOS_TENANT_ID}`,
-				"Authorization": 'Basic '+base64AunthenticationKey
+				"authorization": 'Basic '+base64AunthenticationKey
 			},
-			body:{
-				"locale": "en",
-				"dateFormat": "dd MMMM yyyy",
-				"withdrawnOnDate": `${withdrawal_date}`,
-				"note": `${note}`
+			
+			data:{
+				locale: "en",
+				dateFormat: "dd MMMM yyyy",
+				withdrawnOnDate: `${withdrawal_date}`,
+				note: `${note}`
 			}
+
+			
 		}).then((response) => {
 			res.json({
 				status: "success",
 				result: response.data,
 			});
 		});
-		console.log("Route exists");
+		//console.log("Route exists");
 	} catch (err) {
 		return next(err);
 	}
