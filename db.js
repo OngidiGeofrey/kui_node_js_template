@@ -17,7 +17,6 @@ const sequelize = new Sequelize(
 (async () => {
 	try {
 		await sequelize.authenticate();
-		sequelize.sync({ alter: true });
 		console.log("💾 Database connection has been established successfully.");
 	} catch (error) {
 		console.error("Unable to connect to the database:", error);
@@ -30,7 +29,7 @@ const MifosUser = MifosUserModel(sequelize);
 
 const migrateDb = process.env.MIGRATE_DB || configs.database.migrate;
 if (migrateDb == "TRUE") {
-	sequelize.sync().then(() => {
+	sequelize.sync({alter:true}).then(() => {
 		console.log(`All tables synced!`);
 		process.exit(0);
 	});
