@@ -15,6 +15,9 @@ router.post('/loanproducts/:id',mifosController.get_loan_product_by_id);
 //list loans
 router.post('/loans/listing',mifosController.get_loan_applications);
 
+//loan application 
+router.post('/loans/:id',mifosController.loan_application);
+
 // list loans applied by a client
 router.post('/loans/client/:id',mifosController.client_accounts);
 
