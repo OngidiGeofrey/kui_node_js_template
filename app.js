@@ -34,8 +34,8 @@ app.get('/', (req, res, next) => {
 	}
 });
 
-const taskRoute = require('./routes/taskRoute');
-const userRoute = require('./routes/userRoute');
+// const taskRoute = require('./routes/taskRoute');
+// const userRoute = require('./routes/userRoute');
 const mifosRoute = require('./routes/mifosRoute');
 app.use('/api', mifosRoute); // you can add more routes in this array
 
