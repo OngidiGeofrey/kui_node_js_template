@@ -69,10 +69,10 @@ const port = configs.port;
 var  privateKey, certificate, caBundle;
 
 try {
-	if (fs.existsSync('/etc/pki/tls/private/apitemplate.sandbox.co.ke.key')) {
-		privateKey = fs.readFileSync('/etc/pki/tls/private/apitemplate.sandbox.co.ke.key', 'utf8');
-		certificate = fs.readFileSync('/etc/pki/tls/certs/apitemplate.sandbox.co.ke.cert', 'utf8');
-		caBundle = fs.readFileSync('/etc/pki/tls/certs/apitemplate.sandbox.co.ke.bundle', 'utf8');
+	if (fs.existsSync('/etc/pki/tls/private/digitallending.chamasoft.com.key')) {
+		privateKey = fs.readFileSync('/etc/pki/tls/private/digitallending.chamasoft.com.key', 'utf8');
+		certificate = fs.readFileSync('/etc/pki/tls/certs/digitallending.chamasoft.com.cert', 'utf8');
+		caBundle = fs.readFileSync('/etc/pki/tls/certs/digitallending.chamasoft.com.bundle', 'utf8');
 	} 
 } catch (error) {
 	console.log("Running node.js on local server.");
