@@ -185,13 +185,13 @@ module.exports.listing = async (req, res, next) => {
 	try {
 		
 		const base64AunthenticationKey = req.headers["access-token"];
-		const url = `${process.env.MIFOS_URL}/loanproducts`;
+		const url = `${config.mifosUrl}/loanproducts`;
 		await Axios({
 			method: "GET",
 			url: url,
 			headers: {
 				"Content-Type": "application/json",
-				"Fineract-Platform-TenantId": `${process.env.MIFOS_TENANT_ID}`,
+				"Fineract-Platform-TenantId": `${config.mifosTenantId}`,
 				'Authorization': 'Basic '+base64AunthenticationKey
 			},
 		}).then((response) => {
@@ -346,8 +346,7 @@ module.exports.withdraw_loan_application = async (req, res, next) => {
 				"Fineract-Platform-TenantId": `${config.mifosTenantId}`,
 				"authorization": 'Basic '+base64AunthenticationKey
 			},
-			config.mifosTenantId
-			data:data,
+			data: data,
 
 			
 		}).then((response) => {
