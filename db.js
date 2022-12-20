@@ -8,6 +8,7 @@ const sequelize = new Sequelize(
 	process.env.DB_USER ? process.env.DB_PASSWORD : configs.database.password,
 	{
 		host: process.env.DB_HOST || configs.database.host,
+		port: process.env.DB_PORT || configs.database.port,
 		dialect:
 			process.env.DB_DIALECT ||
 			configs.database.dialect /* 'mysql' | 'mariadb' | 'postgres' | 'mssql' */,
