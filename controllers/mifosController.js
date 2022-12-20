@@ -150,17 +150,23 @@ module.exports.withdraw_loan_application = async (req, res, next) => {
 		
 		let loan__id=req.params.id;
 		let note=req.body.reason;
-		
-		const today = new Date();
-		const day = today.getDate()        // 24
-		const month = today.getMonth()     // 10 (Month is 0-based, so 10 means 11th Month)
-	  	const year = today.getFullYear()
-		
-		const withdrawal_date=day+' '+today.toLocaleString('en-US', { month: 'long' })+' '+year;
-		console.log(withdrawal_date);	//2022
 		const base64AunthenticationKey = req.headers["access_token"];
 		
 		const url = `${process.env.MIFOS_URL}/loans/${loan__id}?command=withdrawnByApplicant`;
+		const today = new Date().toLocaleDateString("en-GB", {
+			day: "numeric",
+			month: "long",
+			year: "numeric",
+		});
+
+		const data = {
+			
+				locale: "en",
+				dateFormat: "dd MMMM yyyy",
+				withdrawnOnDate: `${today}`,
+				note: `${note}`
+			
+		};
 		await Axios({
 			method: "POST",
 			url: url,
@@ -170,12 +176,7 @@ module.exports.withdraw_loan_application = async (req, res, next) => {
 				"authorization": 'Basic '+base64AunthenticationKey
 			},
 			
-			data:{
-				locale: "en",
-				dateFormat: "dd MMMM yyyy",
-				withdrawnOnDate: `${withdrawal_date}`,
-				note: `${note}`
-			}
+			data:data
 
 			
 		}).then((response) => {
@@ -189,3 +190,5 @@ module.exports.withdraw_loan_application = async (req, res, next) => {
 		return next(err);
 	}
 };
+
+
