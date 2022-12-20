@@ -180,6 +180,31 @@ module.exports.makeLoanRepayment = async (req, res, next) => {
 	}
 };
 
+// list all loan products
+module.exports.listing = async (req, res, next) => {
+	try {
+		
+		const base64AunthenticationKey = req.headers["access-token"];
+		const url = `${process.env.MIFOS_URL}/loanproducts`;
+		await Axios({
+			method: "GET",
+			url: url,
+			headers: {
+				"Content-Type": "application/json",
+				"Fineract-Platform-TenantId": `${process.env.MIFOS_TENANT_ID}`,
+				'Authorization': 'Basic '+base64AunthenticationKey
+			},
+		}).then((response) => {
+			res.json({
+				status: "success",
+				result: response.data,
+			});
+		});
+	} catch (err) {
+		return next(err);
+	}
+};
+
 // retrieve  the loan product by Id
 module.exports.get_loan_product_by_id = async (req, res, next) => {
 	try {
@@ -211,8 +236,6 @@ module.exports.get_loan_product_by_id = async (req, res, next) => {
 // list all loans
 module.exports.get_loan_applications = async (req, res, next) => {
 	try {
-		
-		
 		const base64AunthenticationKey = req.headers["access-token"];
 		const url = `${config.mifosUrl}/loans`;
 		
