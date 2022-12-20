@@ -5,7 +5,6 @@ const { MifosUser } = require("../db");
 require("dotenv").config();
 
 module.exports.login = async (req, res, next) => {
-	console.log("headers: ", req.headers);
 	try {
 		const username = req.body.username;
 		const password = req.body.password;
@@ -24,7 +23,7 @@ module.exports.login = async (req, res, next) => {
 				},
 			});
 
-			if (!user) {
+			if (!user) { //if user not found in database
 				//create user in database
 				const newUser = await MifosUser.create({
 					userId: response.data.userId,
@@ -36,11 +35,12 @@ module.exports.login = async (req, res, next) => {
 
 			res.json({
 				status: "success",
+				prompt: !user.clientId ? "Please create client to proceed" : "Login successful",
 				result: { ...response.data, ...user },
-				prompt: !user ? "Please create client to proceed" : "Login successful",
 			});
 		});
 	} catch (err) {
+		console.log("err: ", err);
 		return next(err);
 	}
 };
@@ -103,15 +103,17 @@ module.exports.createClient = async (req, res, next) => {
 			officeId: body.officeId || 1, //req
 			firstname: body.firstname,
 			lastname: body.lastname,
+			address: body.address || [],
+			mobileNo: body.mobileNo,
+			savingsProductId: body.savingsProductId || null,
+			datatables: [...body.datatables] || [],
 			externalId: body.externalId,
 			dateFormat: "dd MM yyyy",
 			locale: "en",
 			active: true,
 			activationDate: today,
 			submittedOnDate: today,
-			datatables: [...body.datatables] || [],
 		};
-		console.log("token: ", req.headers);
 		const clientRegister = await Axios({
 			method: "post",
 			url: `${config.mifosUrl}/clients`,
@@ -127,6 +129,7 @@ module.exports.createClient = async (req, res, next) => {
 				userId: body.userId,
 			},
 		});
+		// console.log("user: ", user);
 		user.clientId = clientRegister.data.clientId;
 		await user.save();
 		return res.json({

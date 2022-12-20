@@ -15,12 +15,11 @@ const {
 } = require("../middlewares/mifosmiddleware");
 
 router.post("/mifos-login", [validationLogin, login]);
-router.post("/mifos-register", [validationRegister], register);
-router.post("/mifos-create-client", [validationCreateClient], createClient);
-router.post(
-	"/mifos-make-loan-repayment",
-	[validationRepayLoan],
-	makeLoanRepayment
-);
+router.post("/mifos-register", [validationRegister, register]);
+router.post("/mifos-create-client", [validationCreateClient, createClient]);
+router.post("/mifos-make-loan-repayment", [
+	validationRepayLoan,
+	makeLoanRepayment,
+]);
 
 module.exports = router;

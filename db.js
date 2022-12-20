@@ -23,12 +23,6 @@ const sequelize = new Sequelize(
 })();
 
 // Create Models
-const { TaskModel } = require('./models/Task');
-const Task = TaskModel(sequelize);
-
-const { UserModel } = require('./models/User');
-const User = UserModel(sequelize);
-
 const { MifosUserModel } = require('./models/MifosUser');
 const MifosUser = MifosUserModel(sequelize);
 
@@ -41,7 +35,5 @@ if ( migrateDb == 'TRUE') {
 }
 
 module.exports = {
-	Task,
-	User,
 	MifosUser,
 };
