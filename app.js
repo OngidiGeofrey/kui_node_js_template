@@ -61,7 +61,7 @@ app.use((err, req, res, next) => {
 });
 
 // Run the server
-const port = process.env.PORT || configs.port;
+const port = configs.port;
 // app.listen(port, () =>
 // 	console.log(`🐹 app listening on http://localhost:${port}`)
 // );
@@ -85,5 +85,6 @@ var httpsServer = https.createServer(certificate_options,app);
 httpServer.listen(configs.local_port);
 httpsServer.listen(configs.port);
 
-console.log(`🐹 app listening on http://localhost:${port}`);
+console.log(`🐹 app listening on http://localhost:${configs.local_port}`);
+console.log(`🐹 app listening on https://localhost:${configs.port}`);
 
