@@ -67,24 +67,19 @@ module.exports.isUserExistsSignup = async (req, res, next) => {
 
 // Schema - Login
 let schemaLogin = yup.object().shape({
-	email: yup
-		.string()
-		.required('Please enter Email')
-		.email('Please enter valid Email'),
-	password: yup
-		.string()
-		.required('Please enter New Password')
-		.min(6, 'Please enter minimum 6 characters'),
+	username: yup.string().required('Please enter Username'),
+	password: yup.string().required('Please enter Password'),
 });
 
 // Validation - Login
-module.exports.validateLogin = (req, res, next) => {
-	console.log('🐞 validateLogin');
+module.exports.validationLogin = (req, res, next) => {
+	// validations here
+	console.log('🐞 validationLogin');
 
 	schemaLogin
 		.validate(
 			{
-				email: req.body.email,
+				username: req.body.username,
 				password: req.body.password,
 			},
 			{ abortEarly: false }
@@ -95,7 +90,7 @@ module.exports.validateLogin = (req, res, next) => {
 		.catch(function (err) {
 			return next(err);
 		});
-};
+}
 
 // ========================================================================
 // Authenticate User Logged in
@@ -344,3 +339,5 @@ module.exports.isResetTokenValid = async (req, res, next) => {
 		return next(err);
 	}
 };
+
+// ========================================================================
