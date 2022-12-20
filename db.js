@@ -1,19 +1,40 @@
 require("dotenv").config();
 const { Sequelize } = require("sequelize");
 const configs = require("./config.json");
+const fs = require("fs");
+let sequelize;
 
-const sequelize = new Sequelize(
-	process.env.DB_NAME || configs.database.database,
-	process.env.DB_USER || configs.database.user,
-	process.env.DB_USER ? process.env.DB_PASSWORD : configs.database.password,
-	{
-		host: process.env.DB_HOST || configs.database.host,
-		port: process.env.DB_PORT || configs.database.port,
-		dialect:
-			process.env.DB_DIALECT ||
-			configs.database.dialect /* 'mysql' | 'mariadb' | 'postgres' | 'mssql' */,
-	}
-);
+if(fs.existsSync('/etc/pki/tls/private/digitallending.chamasoft.com.key')) {
+	sequelize = new Sequelize(
+		process.env.DB_NAME || configs.database.database,
+		process.env.DB_USER || configs.database.prodUser,
+		process.env.DB_USER ? process.env.DB_PASSWORD : configs.database.password,
+		{
+			host: process.env.DB_HOST || configs.database.host,
+			port: process.env.DB_PORT || configs.database.port,
+			dialect:
+				process.env.DB_DIALECT ||
+				configs.database.dialect /* 'mysql' | 'mariadb' | 'postgres' | 'mssql' */,
+		}
+	);
+
+}else{
+	 sequelize = new Sequelize(
+		process.env.DB_NAME || configs.database.database,
+		process.env.DB_USER || configs.database.user,
+		process.env.DB_USER ? process.env.DB_PASSWORD : configs.database.password,
+		{
+			host: process.env.DB_HOST || configs.database.host,
+			port: process.env.DB_PORT || configs.database.port,
+			dialect:
+				process.env.DB_DIALECT ||
+				configs.database.dialect /* 'mysql' | 'mariadb' | 'postgres' | 'mssql' */,
+		}
+	);
+
+}
+
+
 
 (async () => {
 	try {
