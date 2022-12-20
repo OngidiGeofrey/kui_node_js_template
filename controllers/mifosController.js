@@ -35,7 +35,7 @@ module.exports.login = async (req, res, next) => {
 
 			res.json({
 				status: "success",
-				prompt: !user.clientId ? "Please create client to proceed" : "Login successful",
+				prompt: user.clientId===null ? "Please create client to proceed" : "Login successful",
 				result: { ...response.data, ...user },
 			});
 		});
