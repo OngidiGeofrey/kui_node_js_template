@@ -444,3 +444,29 @@ module.exports.loan_application = async (req, res, next) => {
 		return next(err);
 	}
 };
+
+
+//Get Loan Statement By Loan Id
+module.exports.getLoanStatement = async (req, res, next) => {
+    try {
+        const loanId = req.params.id;
+        const accessToken = req.headers['access-token'];
+        const url = `${config.mifosUrl}/loans/${loanId}?associations=all`;
+        await Axios({
+            method: "GET",
+            url: url,
+            headers: {
+                "Content-Type": "application/json",
+                "Fineract-Platform-TenantId": "mkmsandbox",
+                Authorization: `Basic ${accessToken}`,
+            },
+        }).then((response) => {
+            res.json({
+                status: "success",
+                result: response.data,
+            });
+        });
+    } catch (err) {
+        return next(err);
+    }
+};
