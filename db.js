@@ -6,9 +6,9 @@ let sequelize;
 
 if(fs.existsSync('/etc/pki/tls/private/digitallending.chamasoft.com.key')) {
 	sequelize = new Sequelize(
-		process.env.DB_NAME || configs.database.database,
-		process.env.DB_USER || configs.database.prodUser,
-		process.env.DB_USER ? process.env.DB_PASSWORD : configs.database.password,
+		configs.database.database,
+		configs.database.prodUser,
+		configs.database.prodPassword,
 		{
 			host: process.env.DB_HOST || configs.database.host,
 			port: process.env.DB_PORT || configs.database.port,
