@@ -8,7 +8,7 @@
         "migrate": "FALSE"
     },
     "port": 9333,
-    "localPort": 9334,
+    "localPort": 8334,
     "mifosUrl": "https://sandbox.mkmcapitalglobal.co.ke/fineract-provider/api/v1",
     "mifosTenantId":"mkmsandbox",
     "clientURL": "https://lending-api.sandbox.co.ke:8333",

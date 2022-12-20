@@ -82,7 +82,7 @@ var certificate_options = { key: privateKey, cert: certificate, ca: caBundle };
 
 var httpServer = http.createServer(app);
 var httpsServer = https.createServer(certificate_options,app);
-httpServer.listen(configs.local_port);
+httpServer.listen(configs.localPort);
 httpsServer.listen(configs.port);
 
 console.log(`🐹 app listening on http://localhost:${configs.localPort}`);

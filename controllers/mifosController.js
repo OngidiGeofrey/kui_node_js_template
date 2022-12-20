@@ -1,9 +1,8 @@
 const { default: Axios } = require("axios");
-const config = require('../config.json');
+const config = require("../config.json");
 const { MifosUser } = require("../db");
 
 require("dotenv").config();
-
 
 module.exports.login = async (req, res, next) => {
 	console.log("headers: ", req.headers);
@@ -15,7 +14,7 @@ module.exports.login = async (req, res, next) => {
 			url: `${config.mifosUrl}/self/authentication?username=${username}&password=${password}`,
 			headers: {
 				"Content-Type": "application/json",
-				"Fineract-Platform-TenantId": `${config.mifos_tenant_id}`,
+				"Fineract-Platform-TenantId": `${config.mifosTenantId}`,
 			},
 		}).then(async (response) => {
 			// Check the user in the database
@@ -50,6 +49,8 @@ module.exports.register = async (req, res, next) => {
 	//create user in mifos
 	try {
 		const body = req.body;
+		const token = req.headers["access-token"];
+
 		const data = {
 			username: body.username,
 			firstname: body.firstname,
@@ -65,10 +66,11 @@ module.exports.register = async (req, res, next) => {
 		};
 		const register = await Axios({
 			method: "post",
-			url: `${config.mifosUrl}/fineract-provider/api/v1/users`,
+			url: `${config.mifosUrl}/users`,
 			headers: {
 				"Content-Type": "application/json",
 				"Fineract-Platform-TenantId": `${config.mifosTenantId}`,
+				"authorization": `Basic ${token}`,
 			},
 			data: data,
 		});
@@ -90,13 +92,15 @@ module.exports.register = async (req, res, next) => {
 module.exports.createClient = async (req, res, next) => {
 	try {
 		const body = req.body;
+		const token = req.headers["access-token"];
+
 		const today = new Date().toLocaleDateString("en-GB", {
 			day: "numeric",
 			month: "long",
 			year: "numeric",
 		});
 		const data = {
-			officeId: 1, //req
+			officeId: body.officeId || 1, //req
 			firstname: body.firstname,
 			lastname: body.lastname,
 			externalId: body.externalId,
@@ -107,13 +111,14 @@ module.exports.createClient = async (req, res, next) => {
 			submittedOnDate: today,
 			datatables: [...body.datatables] || [],
 		};
+		console.log("token: ", req.headers);
 		const clientRegister = await Axios({
 			method: "post",
-			url: `${config.mifosUrl}/fineract-provider/api/v1/clients`,
+			url: `${config.mifosUrl}/clients`,
 			headers: {
 				"Content-Type": "application/json",
 				"Fineract-Platform-TenantId": `${config.mifosTenantId}`,
-				authorization: `BASIC ${req.headers.authorization}`,
+				"authorization": `Basic ${token}`,
 			},
 			data: data,
 		});
@@ -136,6 +141,7 @@ module.exports.createClient = async (req, res, next) => {
 module.exports.makeLoanRepayment = async (req, res, next) => {
 	try {
 		const body = req.body;
+		const token = req.headers["access-token"];
 		const data = {
 			locale: "en",
 			dateFormat: "dd MMMM yyyy",
@@ -151,11 +157,11 @@ module.exports.makeLoanRepayment = async (req, res, next) => {
 
 		const repayment = await Axios({
 			method: "post",
-			url: `${config.mifosUrl}/fineract-provider/api/v1/loans/${body.loanId}/transactions?command=repayment`,
+			url: `${config.mifosUrl}/loans/${body.loanId}/transactions?command=repayment`,
 			headers: {
 				"Content-Type": "application/json",
 				"Fineract-Platform-TenantId": `${config.mifosTenantId}`,
-				authorization: `BASIC ${req.headers.authorization}`,
+				"authorization": `Basic ${token}`,
 			},
 			data: data,
 		});
