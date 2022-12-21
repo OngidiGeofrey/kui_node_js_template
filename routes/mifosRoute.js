@@ -44,4 +44,8 @@ router.post('/client/summary/:id',mifosController.client_summary);
 
 //withdraw a loan
 router.post('/loans/withdraw/:id',mifosController.withdraw_loan_application);
+//Get Loan Statement
+//e.g. http://localhost:8443/api/get-loan-statement/21
+router.post('/get-loan-statement/:id', mifosController.getLoanStatement);
+
 module.exports = router;
