@@ -65,7 +65,7 @@ module.exports.register = async (req, res, next) => {
 			email: body.email,
 			officeId: 1,
 			staffId: 1,
-			roles: [2],
+			roles: `[2]`,
 			sendPasswordToEmail: true,
 			isSelfServiceUser: true,
 		};
