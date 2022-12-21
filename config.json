@@ -12,6 +12,8 @@
     },
     "port": 9333,
     "localPort": 8334,
+    "mifosUsername": "superadmin",
+    "mifosPassword": "mkm5@ndbox",
     "mifosUrl": "https://sandbox.mkmcapitalglobal.co.ke/fineract-provider/api/v1",
     "mifosTenantId":"mkmsandbox",
     "clientURL": "https://lending-api.sandbox.co.ke:8333",
