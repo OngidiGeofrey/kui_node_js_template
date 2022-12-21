@@ -10,7 +10,7 @@
         "dialect": "mysql",
         "migrate": "FALSE"
     },
-    "port": 9333,
+    "port": 9334,
     "localPort": 8334,
     "mifosUrl": "https://sandbox.mkmcapitalglobal.co.ke/fineract-provider/api/v1",
     "mifosTenantId":"mkmsandbox",
