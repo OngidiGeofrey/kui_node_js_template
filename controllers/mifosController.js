@@ -182,8 +182,7 @@ module.exports.makeLoanRepayment = async (req, res, next) => {
 
 // list all loan products
 module.exports.listing = async (req, res, next) => {
-	try {
-		
+	try {	
 		const base64AunthenticationKey = req.headers["access-token"];
 		const url = `${config.mifosUrl}/loanproducts`;
 		await Axios({
