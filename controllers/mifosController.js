@@ -58,17 +58,18 @@ module.exports.register = async (req, res, next) => {
 			`${config.mifosUsername}:${config.mifosPassword}`
 		).toString("base64");
 
-		const data = {
+		let data = {
 			username: body.username,
 			firstname: body.firstname,
 			lastname: body.lastname,
 			email: body.email,
 			officeId: 1,
 			staffId: 1,
-			roles: body.roles,
+			roles: `${body.roles}`,
 			sendPasswordToEmail: true,
 			isSelfServiceUser: true,
 		};
+		
 		const register = await Axios({
 			method: "post",
 			url: `${config.mifosUrl}/users`,
