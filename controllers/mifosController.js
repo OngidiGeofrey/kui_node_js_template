@@ -54,7 +54,7 @@ module.exports.register = async (req, res, next) => {
 	//create user in mifos
 	try {
 		const body = req.body;
-		const token = "Z2VvZnJleTowNzE3OTA3ODk4" 
+		const token = `${config.mifosAdminTenantkey}`;
 		/*Buffer(
 			`${config.mifosUsername}:${config.mifosPassword}`
 		).toString("base64");*/
