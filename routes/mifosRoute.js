@@ -22,7 +22,7 @@ router.post("/mifos-create-client", [validationCreateClient, createClient]);
 
 const mifosController = require('../controllers/mifosController');
 
-router.post('/make-loan-repayment',mifosController.make_loan_repayment);
+router.post('/make-loan-repayment/:id',mifosController.make_loan_repayment);
 //loan products listing 
 router.post('/loanproducts/listing',mifosController.listing);
 

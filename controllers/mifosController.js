@@ -150,60 +150,40 @@ module.exports.createClient = async (req, res, next) => {
 
 module.exports.makeLoanRepayment = async (req, res, next) => {
 	try {
-		const body = req.body;
-		const token = req.headers["access-token"];
+		let loan__id = req.params.id;
+		let note = req.body.reason;
+		const base64AunthenticationKey = req.headers["access-token"];
 
+		const url = `${config.mifosUrl}/loans/${loan__id}?command=withdrawnByApplicant`;
+		const today = new Date().toLocaleDateString("en-GB", {
+			day: "numeric",
+			month: "long",
+			year: "numeric",
+		});
 
-		const data1={
-
-			
-				loanID:20,
-				dateFormat: "dd MMMM yyyy",
-				locale: "en",
-				transactionDate: "02 December 2022",
-				transactionAmount: "500.00",
-				paymentTypeId: "1",
-				note: "check payment",
-				accountNumber: "acc123",
-				checkNumber: "che123",
-				routingCode: "rou123",
-				receiptNumber: "rec123",
-				bankNumber: "ban123"
-			  
-		}
 		const data = {
 			locale: "en",
 			dateFormat: "dd MMMM yyyy",
-			transactionDate: new Date().toLocaleDateString("en-GB", {
-				day: "numeric",
-				month: "long",
-				year: "numeric",
-			}),
-			paymentTypeId: body.paymentTypeId,
-			note: body.note || "Repayment",
-			transactionAmount: body.transactionAmount,
-		    accountNumber: "acc123",
-  			checkNumber: "che123",
-  			routingCode: "rou123",
-		    receiptNumber: "rec123",
-            bankNumber: "ban123"
+			withdrawnOnDate: `${today}`,
+			note: `${note}`,
 		};
-
-		const repayment = await Axios({
-			method: "post",
-			url: `${config.mifosUrl}/loans/${body.loanId}/transactions?command=repayment`,
+		await Axios({
+			method: "POST",
+			url: url,
 			headers: {
-				"Content-Type": "application/json",
 				"Fineract-Platform-TenantId": `${config.mifosTenantId}`,
-				authorization: `Basic ${token}`,
+				authorization: "Basic " + base64AunthenticationKey,
 			},
-			data: data1,
+			data: data,
+		}).then((response) => {
+			console.log(data);
+			return res.json({
+				result_code: 0,
+				status: "success",
+				result: response.data,
+			});
 		});
-		return res.json({
-			status: "success",
-			result: repayment.data,
-		});
-	} catch {
+	} catch (err) {
 		return next(err);
 	}
 };
@@ -381,21 +361,30 @@ module.exports.make_loan_repayment = async (req, res, next) => {
 	try {
 		let loan__id = req.params.id;
 		let note = req.body.reason;
-		const base64AunthenticationKey = req.headers["access_token"];
+		const base64AunthenticationKey = req.headers["access-token"];
 
-		const url = `${config.mifosUrl}/loans/${loan__id}?command=withdrawnByApplicant`;
+		const url = `${config.mifosUrl}/loans/${loan__id}/transactions?command=repayment`;
 		const today = new Date().toLocaleDateString("en-GB", {
 			day: "numeric",
 			month: "long",
 			year: "numeric",
 		});
 
-		const data = {
-			locale: "en",
+		const data1={
 			dateFormat: "dd MMMM yyyy",
-			withdrawnOnDate: `${today}`,
-			note: `${note}`,
-		};
+			locale: "en",
+			transactionDate: `${today}`,
+			transactionAmount: req.body.transactionAmount,
+			paymentTypeId: req.body.paymentTypeId,
+			note: req.body.note,
+			accountNumber: req.body.accountNumber,
+			checkNumber: req.body.checkNumber,
+			routingCode: req.body.routingCode,
+			receiptNumber: req.body.receiptNumber,
+			bankNumber: req.body.bankNumber,
+		  }
+		  console.log(data1)
+
 		await Axios({
 			method: "POST",
 			url: url,
@@ -403,7 +392,7 @@ module.exports.make_loan_repayment = async (req, res, next) => {
 				"Fineract-Platform-TenantId": `${config.mifosTenantId}`,
 				authorization: "Basic " + base64AunthenticationKey,
 			},
-			data: data,
+			data: data1,
 		}).then((response) => {
 			console.log(data);
 			return res.json({
