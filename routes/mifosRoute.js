@@ -17,13 +17,12 @@ const {
 router.post("/mifos-login", [validationLogin, login]);
 router.post("/mifos-register", [validationRegister, register]);
 router.post("/mifos-create-client", [validationCreateClient, createClient]);
-router.post("/mifos-make-loan-repayment", [
-	validationRepayLoan,
-	makeLoanRepayment,
-]);
+
 
 
 const mifosController = require('../controllers/mifosController');
+
+router.post('/make-loan-repayment',mifosController.make_loan_repayment);
 //loan products listing 
 router.post('/loanproducts/listing',mifosController.listing);
 

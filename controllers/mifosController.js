@@ -152,6 +152,25 @@ module.exports.makeLoanRepayment = async (req, res, next) => {
 	try {
 		const body = req.body;
 		const token = req.headers["access-token"];
+
+
+		const data1={
+
+			
+				loanID:20,
+				dateFormat: "dd MMMM yyyy",
+				locale: "en",
+				transactionDate: "02 December 2022",
+				transactionAmount: "500.00",
+				paymentTypeId: "1",
+				note: "check payment",
+				accountNumber: "acc123",
+				checkNumber: "che123",
+				routingCode: "rou123",
+				receiptNumber: "rec123",
+				bankNumber: "ban123"
+			  
+		}
 		const data = {
 			locale: "en",
 			dateFormat: "dd MMMM yyyy",
@@ -162,7 +181,12 @@ module.exports.makeLoanRepayment = async (req, res, next) => {
 			}),
 			paymentTypeId: body.paymentTypeId,
 			note: body.note || "Repayment",
-			transactionAmount: body.amount,
+			transactionAmount: body.transactionAmount,
+		    accountNumber: "acc123",
+  			checkNumber: "che123",
+  			routingCode: "rou123",
+		    receiptNumber: "rec123",
+            bankNumber: "ban123"
 		};
 
 		const repayment = await Axios({
@@ -173,7 +197,7 @@ module.exports.makeLoanRepayment = async (req, res, next) => {
 				"Fineract-Platform-TenantId": `${config.mifosTenantId}`,
 				authorization: `Basic ${token}`,
 			},
-			data: data,
+			data: data1,
 		});
 		return res.json({
 			status: "success",
@@ -312,6 +336,48 @@ module.exports.client_summary = async (req, res, next) => {
 
 // withdraw loan application
 module.exports.withdraw_loan_application = async (req, res, next) => {
+	try {
+		let loan__id = req.params.id;
+		let note = req.body.reason;
+		const base64AunthenticationKey = req.headers["access-token"];
+
+		const url = `${config.mifosUrl}/loans/${loan__id}?command=withdrawnByApplicant`;
+		const today = new Date().toLocaleDateString("en-GB", {
+			day: "numeric",
+			month: "long",
+			year: "numeric",
+		});
+
+		const data = {
+			locale: "en",
+			dateFormat: "dd MMMM yyyy",
+			withdrawnOnDate: `${today}`,
+			note: `${note}`,
+		};
+		await Axios({
+			method: "POST",
+			url: url,
+			headers: {
+				"Fineract-Platform-TenantId": `${config.mifosTenantId}`,
+				authorization: "Basic " + base64AunthenticationKey,
+			},
+			data: data,
+		}).then((response) => {
+			console.log(data);
+			return res.json({
+				result_code: 0,
+				status: "success",
+				result: response.data,
+			});
+		});
+	} catch (err) {
+		return next(err);
+	}
+};
+
+
+// make loan repayment
+module.exports.make_loan_repayment = async (req, res, next) => {
 	try {
 		let loan__id = req.params.id;
 		let note = req.body.reason;
