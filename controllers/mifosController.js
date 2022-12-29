@@ -64,13 +64,15 @@ module.exports.register = async (req, res, next) => {
 			firstname: body.firstname,
 			lastname: body.lastname,
 			email: body.email,
+			password: body.password,
+			repeatPassword: body.repeatPassword,
 			officeId: 1,
 			staffId: 1,
-			roles: [2],
+			roles: body.roles || ["2", "2"],
 			sendPasswordToEmail: false,
-			isSelfServiceUser: true,
+			passwordNeverExpires: true,
 		};
-		
+
 		const register = await Axios({
 			method: "post",
 			url: `${config.mifosUrl}/users`,
@@ -89,7 +91,7 @@ module.exports.register = async (req, res, next) => {
 		});
 		return res.json({
 			status: "success",
-			result: user,
+			result: {...user, ...register.data},
 		});
 	} catch (err) {
 		return next(err);
@@ -355,7 +357,6 @@ module.exports.withdraw_loan_application = async (req, res, next) => {
 	}
 };
 
-
 // make loan repayment
 module.exports.make_loan_repayment = async (req, res, next) => {
 	try {
@@ -370,7 +371,7 @@ module.exports.make_loan_repayment = async (req, res, next) => {
 			year: "numeric",
 		});
 
-		const data1={
+		const data1 = {
 			dateFormat: "dd MMMM yyyy",
 			locale: "en",
 			transactionDate: `${today}`,
@@ -382,8 +383,8 @@ module.exports.make_loan_repayment = async (req, res, next) => {
 			routingCode: req.body.routingCode,
 			receiptNumber: req.body.receiptNumber,
 			bankNumber: req.body.bankNumber,
-		  }
-		  console.log(data1)
+		};
+		console.log(data1);
 
 		await Axios({
 			method: "POST",
