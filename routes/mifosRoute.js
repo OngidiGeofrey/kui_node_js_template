@@ -26,6 +26,9 @@ router.post('/make-loan-repayment/:id',mifosController.make_loan_repayment);
 //loan products listing 
 router.post('/loanproducts/listing',mifosController.listing);
 
+//amortization schedule 
+router.post('/loans/amortization-schedule/:id',mifosController.amortization_schedule);
+
 //retrieve a loan product
 router.post('/loanproducts/:id',mifosController.get_loan_product_by_id);
 
