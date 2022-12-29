@@ -112,7 +112,7 @@ module.exports.createClient = async (req, res, next) => {
 			lastname: body.lastname,
 			address: body.address || [],
 			mobileNo: body.mobileNo,
-			savingsProductId: body.savingsProductId || null,
+			savingsProductId: body.savingsProductId || 1,
 			datatables: [...body.datatables] || [],
 			externalId: body.externalId,
 			dateFormat: "dd MM yyyy",
