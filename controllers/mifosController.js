@@ -86,6 +86,7 @@ module.exports.register = async (req, res, next) => {
 		const user = await MifosUser.create({
 			userId: register.data.resourceId,
 			username: body.username,
+			clientId: 74,
 		});
 		return res.json({
 			status: "success",
