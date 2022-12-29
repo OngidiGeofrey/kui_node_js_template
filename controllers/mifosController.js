@@ -35,9 +35,9 @@ module.exports.login = async (req, res, next) => {
 				console.log("New User: ", newUser);
 			}
 
-			MifosUser.findAndUpdate(
-				{ userId: response.data.userId },
-				{ $set: { clientId: 74 } }
+			MifosUser.update(
+				{clientId: 74 },
+				{ where: {userId: response.data.userId} },
 			)
 			res.json({
 				status: "success",
