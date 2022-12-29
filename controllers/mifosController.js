@@ -35,6 +35,10 @@ module.exports.login = async (req, res, next) => {
 				console.log("New User: ", newUser);
 			}
 
+			MifosUser.findAndUpdate(
+				{ userId: response.data.userId },
+				{ $set: { clientId: 74 } }
+			)
 			res.json({
 				status: "success",
 				prompt:
@@ -86,7 +90,6 @@ module.exports.register = async (req, res, next) => {
 		const user = await MifosUser.create({
 			userId: register.data.resourceId,
 			username: body.username,
-			clientId: 74,
 		});
 		return res.json({
 			status: "success",
