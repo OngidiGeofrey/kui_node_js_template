@@ -55,14 +55,24 @@ module.exports.register = async (req, res, next) => {
 	try {
 		const body = req.body;
 		const token = `${config.mifosAdminTenantkey}`;
+		
+		const today = new Date().toLocaleDateString("en-GB", {
+			day: "numeric",
+			month: "long",
+			year: "numeric",
+		});
 		/*Buffer(
 			`${config.mifosUsername}:${config.mifosPassword}`
 		).toString("base64");*/
+
+		// create a user
 
 		let data = {
 			username: body.username,
 			firstname: body.firstname,
 			lastname: body.lastname,
+			password : body.password,
+			repeatPassword: body.repeatPassword,
 			email: body.email,
 			officeId: 1,
 			staffId: 1,
@@ -82,9 +92,38 @@ module.exports.register = async (req, res, next) => {
 			data: data,
 		});
 
-		//create user in database
+
+		//create a  client
+
+		const client_data = {
+			officeId:  1, //req
+			firstname: body.firstname,
+			lastname: body.lastname,
+			mobileNo: body.mobileNo,
+			dateFormat: "dd MMMM yyyy",
+			locale: "en",
+			active: true,
+			activationDate: today,
+			submittedOnDate: today,
+			savingsProductId:null,
+			familyMembers:[],
+			address:  [],	
+		};
+		const register_client= await Axios({
+			method: "post",
+			url: `${config.mifosUrl}/clients`,
+			headers: {
+				"Content-Type": "application/json",
+				"Fineract-Platform-TenantId": `${config.mifosTenantId}`,
+				authorization: `Basic ${token}`,
+			},
+			data: client_data,
+		});
+
+		//create user and client in database
 		const user = await MifosUser.create({
 			userId: register.data.resourceId,
+			clientId: register_client.data.clientId,
 			username: body.username,
 		});
 		return res.json({
@@ -96,57 +135,6 @@ module.exports.register = async (req, res, next) => {
 	}
 };
 
-module.exports.createClient = async (req, res, next) => {
-	try {
-		const body = req.body;
-		const token = req.headers["access-token"];
-
-		const today = new Date().toLocaleDateString("en-GB", {
-			day: "numeric",
-			month: "long",
-			year: "numeric",
-		});
-		const data = {
-			officeId: body.officeId || 1, //req
-			firstname: body.firstname,
-			lastname: body.lastname,
-			address: body.address || [],
-			mobileNo: body.mobileNo,
-			savingsProductId: body.savingsProductId || null,
-			datatables: [...body.datatables] || [],
-			externalId: body.externalId,
-			dateFormat: "dd MM yyyy",
-			locale: "en",
-			active: true,
-			activationDate: today,
-			submittedOnDate: today,
-		};
-		const clientRegister = await Axios({
-			method: "post",
-			url: `${config.mifosUrl}/clients`,
-			headers: {
-				"Content-Type": "application/json",
-				"Fineract-Platform-TenantId": `${config.mifosTenantId}`,
-				authorization: `Basic ${token}`,
-			},
-			data: data,
-		});
-		const user = await MifosUser.findOne({
-			where: {
-				userId: body.userId,
-			},
-		});
-		// console.log("user: ", user);
-		user.clientId = clientRegister.data.clientId;
-		await user.save();
-		return res.json({
-			status: "success",
-			result: user,
-		});
-	} catch (err) {
-		return next(err);
-	}
-};
 
 module.exports.makeLoanRepayment = async (req, res, next) => {
 	try {
@@ -494,7 +482,7 @@ module.exports.getLoanStatement = async (req, res, next) => {
 			url: url,
 			headers: {
 				"Content-Type": "application/json",
-				"Fineract-Platform-TenantId": "mkmsandbox",
+				"Fineract-Platform-TenantId": `${config.mifosTenantId}`,
 				Authorization: `Basic ${accessToken}`,
 			},
 		}).then((response) => {
@@ -515,17 +503,18 @@ module.exports.amortization_schedule = async (req, res, next) => {
 	try {
 		const loanId = req.params.id;
 		const accessToken = req.headers["access-token"];
-		const url = `${config.mifosUrl}/loans/${loanId}?associations=all`;
+		const url = `${config.mifosUrl}/loans/${loanId}/schedule?command=calculateLoanSchedule`;
 		await Axios({
-			method: "GET",
+			method: "POST",
 			url: url,
 			headers: {
 				"Content-Type": "application/json",
-				"Fineract-Platform-TenantId": "mkmsandbox",
+				"Fineract-Platform-TenantId": `${config.mifosTenantId}`,
 				Authorization: `Basic ${accessToken}`,
 			},
 		}).then((response) => {
 			res.json({
+				loanId: loanId,
 				status: "success",
 				result: response.data,
 			});

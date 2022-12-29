@@ -16,7 +16,7 @@ const {
 
 router.post("/mifos-login", [validationLogin, login]);
 router.post("/mifos-register", [validationRegister, register]);
-router.post("/mifos-create-client", [validationCreateClient, createClient]);
+
 
 
 
