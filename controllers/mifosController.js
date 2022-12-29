@@ -35,10 +35,6 @@ module.exports.login = async (req, res, next) => {
 				console.log("New User: ", newUser);
 			}
 
-			MifosUser.update(
-				{clientId: 74 },
-				{ where: {userId: response.data.userId} },
-			)
 			res.json({
 				status: "success",
 				prompt:
