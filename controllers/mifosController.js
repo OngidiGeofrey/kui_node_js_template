@@ -450,6 +450,8 @@ module.exports.loan_application = async (req, res, next) => {
 			expectedDisbursementDate: `${today}`,
 			submittedOnDate: `${today}`,
 		};
+
+	
 		await Axios({
 			method: "POST",
 			url: url,
@@ -459,6 +461,7 @@ module.exports.loan_application = async (req, res, next) => {
 			},
 
 			data: data,
+			
 		}).then((response) => {
 			console.log(data);
 			return res.json({
@@ -504,7 +507,7 @@ module.exports.amortization_schedule = async (req, res, next) => {
 	try {
 		const loanId = req.params.id;
 		const accessToken = req.headers["access-token"];
-		const url = `${config.mifosUrl}/loans/${loanId}/schedule?command=calculateLoanSchedule`;
+		const url = `${config.mifosUrl}/loans/${loanId}`;
 		await Axios({
 			method: "POST",
 			url: url,
