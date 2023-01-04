@@ -398,7 +398,9 @@ module.exports.make_loan_repayment = async (req, res, next) => {
 //make loan application
 module.exports.loan_application = async (req, res, next) => {
 	try {
-		let clientId = req.params.id;
+
+		let data=req.body;
+		/*let clientId = req.params.id;
 		let productId = req.body.productId;
 		let principal = req.body.principal;
 		let loanTermFrequency = req.body.loanTermFrequency;
@@ -412,7 +414,7 @@ module.exports.loan_application = async (req, res, next) => {
 		let interestType = req.body.interestType;
 		let interestCalculationPeriodType = req.body.interestCalculationPeriodType;
 		let transactionProcessingStrategyId =req.body.transactionProcessingStrategyId;
-		let allowPartialPeriodInterestCalcualtion =req.body.allowPartialPeriodInterestCalcualtion;
+		let allowPartialPeriodInterestCalcualtion =req.body.allowPartialPeriodInterestCalcualtion;*/
 
 		const base64AunthenticationKey = req.headers["access-token"];
 
@@ -423,21 +425,21 @@ module.exports.loan_application = async (req, res, next) => {
 			year: "numeric",
 		});
 
-		const data = {
-			"clientId":`${clientId}`,
-			"productId":`${productId}`,
-			"disbursementData":[],
-			"fundId":1,
-			"principal":`${principal}`,
+	/*	const data = {
+			"clientId": `${clientId}`,
+			"productId": productId,
+			"disbursementData": [],
+			"fundId": 1,
+			"principal": principal,
 			"loanTermFrequency": loanTermFrequency,
-			"loanTermFrequencyType":loanTermFrequencyType,
-			"numberOfRepayments":numberOfRepayments,
-			"repaymentEvery":repaymentEvery,
-			"repaymentFrequencyType":repaymentFrequencyType,
-			"interestRatePerPeriod":interestRatePerPeriod,
-			"amortizationType":amortizationType,
-			"isEqualAmortization":isEqualAmortization,
-			"interestType":interestType,
+			"loanTermFrequencyType": loanTermFrequencyType,
+			"numberOfRepayments": numberOfRepayments,
+			"repaymentEvery": repaymentEvery,
+			"repaymentFrequencyType": repaymentFrequencyType,
+			"interestRatePerPeriod": interestRatePerPeriod,
+			"amortizationType": amortizationType,
+			"isEqualAmortization": isEqualAmortization,
+			"interestType": interestType,
 			"interestCalculationPeriodType":interestCalculationPeriodType,
 			"allowPartialPeriodInterestCalcualtion":allowPartialPeriodInterestCalcualtion,
 			"transactionProcessingStrategyId":transactionProcessingStrategyId,
@@ -445,12 +447,12 @@ module.exports.loan_application = async (req, res, next) => {
 			"locale":"en",
 			"dateFormat":"dd MMMM yyyy",
 			"loanType":"individual",
-			"expectedDisbursementDate":today,
-			"submittedOnDate":today
+			"expectedDisbursementDate":`${today}`,
+			"submittedOnDate":`${today}`
 
-			};
+			};*/
 
-	
+	console.log(data);
 		await Axios({
 			method: "POST",
 			url: url,
