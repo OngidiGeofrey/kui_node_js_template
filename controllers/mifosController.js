@@ -467,7 +467,7 @@ module.exports.loan_application = async (req, res, next) => {
 			console.log(data);
 			return res.json({
 				result_code: 0,
-				status: "success",
+				status: "Your loan request has been received for processing",
 				result: response.data,
 			});
 		});
