@@ -411,10 +411,8 @@ module.exports.loan_application = async (req, res, next) => {
 		let isEqualAmortization = req.body.isEqualAmortization;
 		let interestType = req.body.interestType;
 		let interestCalculationPeriodType = req.body.interestCalculationPeriodType;
-		let transactionProcessingStrategyId =
-			req.body.transactionProcessingStrategyId;
-		let allowPartialPeriodInterestCalcualtion =
-			req.body.allowPartialPeriodInterestCalcualtion;
+		let transactionProcessingStrategyId =req.body.transactionProcessingStrategyId;
+		let allowPartialPeriodInterestCalcualtion =req.body.allowPartialPeriodInterestCalcualtion;
 
 		const base64AunthenticationKey = req.headers["access-token"];
 
