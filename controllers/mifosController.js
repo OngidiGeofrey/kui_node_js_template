@@ -424,30 +424,31 @@ module.exports.loan_application = async (req, res, next) => {
 		});
 
 		const data = {
-			clientId: `${clientId}`,
-			productId: `${productId}`,
-			disbursementData: [],
-			fundId: 1,
-			principal: `${principal}`,
-			loanTermFrequency: `${loanTermFrequency}`,
-			loanTermFrequencyType: `${loanTermFrequencyType}`,
-			numberOfRepayments: `${numberOfRepayments}`,
-			repaymentEvery: `${repaymentEvery}`,
-			repaymentFrequencyType: `${repaymentFrequencyType}`,
-			interestRatePerPeriod: `${interestRatePerPeriod}`,
-			amortizationType: `${amortizationType}`,
-			isEqualAmortization: `${isEqualAmortization}`,
-			interestType: `${interestType}`,
-			interestCalculationPeriodType: `${interestCalculationPeriodType}`,
-			allowPartialPeriodInterestCalcualtion: `${allowPartialPeriodInterestCalcualtion}`,
-			transactionProcessingStrategyId: `${transactionProcessingStrategyId}`,
-			charges: [],
-			locale: "en",
-			dateFormat: "dd MMMM yyyy",
-			loanType: "individual",
-			expectedDisbursementDate: `${today}`,
-			submittedOnDate: `${today}`,
-		};
+			"clientId":"18",
+			"productId":3,
+			"disbursementData":[],
+			"fundId":1,
+			"principal":10000,
+			"loanTermFrequency":3,
+			"loanTermFrequencyType":2,
+			"numberOfRepayments":3,
+			"repaymentEvery":1,
+			"repaymentFrequencyType":2,
+			"interestRatePerPeriod":30,
+			"amortizationType":0,
+			"isEqualAmortization":false,
+			"interestType":1,
+			"interestCalculationPeriodType":1,
+			"allowPartialPeriodInterestCalcualtion":false,
+			"transactionProcessingStrategyId":7,
+			"charges":[{"chargeId":2,"amount":1}],
+			"locale":"en",
+			"dateFormat":"dd MMMM yyyy",
+			"loanType":"individual",
+			"expectedDisbursementDate":"02 December 2022",
+			"submittedOnDate":"02 December 2022"
+
+			};
 
 	
 		await Axios({
