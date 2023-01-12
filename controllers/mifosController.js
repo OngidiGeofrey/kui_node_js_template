@@ -508,7 +508,8 @@ module.exports.amortization_schedule = async (req, res, next) => {
 	try {
 		const loanId = req.params.id;
 		const accessToken = req.headers["access-token"];
-		const url = `${config.mifosUrl}/loans/${loanId}`;
+		
+		const url = `${config.mifosUrl}/loans/${loanId}?associations=all&exclude=guarantors,futureSchedule`;
 		await Axios({
 			method: "GET",
 			url: url,
