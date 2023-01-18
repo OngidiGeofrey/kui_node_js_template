@@ -502,6 +502,7 @@ module.exports.getLoanStatement = async (req, res, next) => {
 				"Fineract-Platform-TenantId": `${config.mifosTenantId}`,
 				Authorization: `Basic ${accessToken}`,
 			},
+			httpsAgent: new https.Agent({ rejectUnauthorized: false })
 		}).then((response) => {
 			res.json({
 				status: "success",
