@@ -218,6 +218,7 @@ module.exports.get_loan_product_by_id = async (req, res, next) => {
 
 		await Axios({
 			method: "GET",
+			httpsAgent: new https.Agent({ rejectUnauthorized: false }),
 			url: url,
 			headers: {
 				"Content-Type": "application/json",
