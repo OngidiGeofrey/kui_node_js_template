@@ -13,15 +13,9 @@ const {
 	validationCreateClient,
 	validationRepayLoan,
 } = require("../middlewares/mifosmiddleware");
-
 router.post("/mifos-login", [validationLogin, login]);
 router.post("/mifos-register", [validationRegister, register]);
-
-
-
-
 const mifosController = require('../controllers/mifosController');
-
 router.post('/make-loan-repayment/:id',mifosController.make_loan_repayment);
 //loan products listing 
 router.post('/loanproducts/listing',mifosController.listing);
