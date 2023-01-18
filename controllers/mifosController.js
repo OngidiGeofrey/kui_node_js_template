@@ -1,6 +1,7 @@
 const { default: Axios } = require("axios");
 const config = require("../config.json");
 const { MifosUser } = require("../db");
+const https = require('node:https');
 var JSON = require("querystring");
 
 require("dotenv").config();
@@ -16,6 +17,7 @@ module.exports.login = async (req, res, next) => {
 				"Content-Type": "application/json",
 				"Fineract-Platform-TenantId": `${config.mifosTenantId}`,
 			},
+			httpsAgent: new https.Agent({ rejectUnauthorized: false })
 		}).then(async (response) => {
 			// Check the user in the database
 			const user = await MifosUser.findOne({
@@ -51,8 +53,14 @@ module.exports.login = async (req, res, next) => {
 };
 
 module.exports.register = async (req, res, next) => {
+	
 	//create user in mifos
+
+	console.log("Hello World");
 	try {
+
+		
+
 		const body = req.body;
 		const token = `${config.mifosAdminTenantkey}`;
 		
@@ -91,6 +99,7 @@ module.exports.register = async (req, res, next) => {
 				"Fineract-Platform-TenantId": `${config.mifosTenantId}`,
 				authorization: `Basic ${token}`,
 			},
+			httpsAgent: new https.Agent({ rejectUnauthorized: false }),
 			data: data,
 		});
 
@@ -119,7 +128,9 @@ module.exports.register = async (req, res, next) => {
 				"Fineract-Platform-TenantId": `${config.mifosTenantId}`,
 				authorization: `Basic ${token}`,
 			},
+			
 			data: client_data,
+			httpsAgent: new https.Agent({ rejectUnauthorized: false }),
 		});
 
 		//create user and client in database
@@ -268,6 +279,7 @@ module.exports.client_accounts = async (req, res, next) => {
 				"Fineract-Platform-TenantId": `${config.mifosTenantId}`,
 				Authorization: "Basic " + base64AunthenticationKey,
 			},
+			httpsAgent: new https.Agent({ rejectUnauthorized: false })
 		}).then((response) => {
 			res.json({
 				status: "success",
