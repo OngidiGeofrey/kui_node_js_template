@@ -55,16 +55,11 @@ module.exports.login = async (req, res, next) => {
 module.exports.register = async (req, res, next) => {
 	
 	//create user in mifos
-
-	console.log("Hello World");
 	try {
-
-		
-
 		const body = req.body;
 		const token = `${config.mifosAdminTenantkey}`;
 		
-		const today = new Date().toLocaleDateString("en-GB", {
+const today = new Date().toLocaleDateString("en-GB", {
 			day: "numeric",
 			month: "long",
 			year: "numeric",
@@ -122,15 +117,15 @@ module.exports.register = async (req, res, next) => {
 		};
 		const register_client= await Axios({
 			method: "post",
+			httpsAgent: new https.Agent({ rejectUnauthorized: false }),
 			url: `${config.mifosUrl}/clients`,
 			headers: {
 				"Content-Type": "application/json",
 				"Fineract-Platform-TenantId": `${config.mifosTenantId}`,
 				authorization: `Basic ${token}`,
 			},
-			
 			data: client_data,
-			httpsAgent: new https.Agent({ rejectUnauthorized: false }),
+			
 		});
 
 		//create user and client in database
