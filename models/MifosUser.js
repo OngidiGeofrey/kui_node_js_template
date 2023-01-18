@@ -20,7 +20,7 @@ module.exports.MifosUserModel = (sequelize) => {
             },
             clientId: {
                 type: DataTypes.STRING,
-            },
+            }
             
         },
         {

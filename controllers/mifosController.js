@@ -59,18 +59,14 @@ module.exports.register = async (req, res, next) => {
 		const body = req.body;
 		const token = `${config.mifosAdminTenantkey}`;
 		
-const today = new Date().toLocaleDateString("en-GB", {
+	const today = new Date().toLocaleDateString("en-GB", {
 			day: "numeric",
 			month: "long",
 			year: "numeric",
 		});
-		/*Buffer(
-			`${config.mifosUsername}:${config.mifosPassword}`
-		).toString("base64");*/
-
 		// create a user
 
-		let data = {
+		let user_data = {
 			username: body.username,
 			firstname: body.firstname,
 			lastname: body.lastname,
@@ -83,23 +79,23 @@ const today = new Date().toLocaleDateString("en-GB", {
 			staffId: 1,
 			roles: body.roles || ["2", "2"],
 			sendPasswordToEmail: false,
-			passwordNeverExpires: true,
+			
 		};
+		console.log(user_data)
 
 		const register = await Axios({
 			method: "post",
+			httpsAgent: new https.Agent({ rejectUnauthorized:false}),
 			url: `${config.mifosUrl}/users`,
+			
 			headers: {
 				"Content-Type": "application/json",
 				"Fineract-Platform-TenantId": `${config.mifosTenantId}`,
-				authorization: `Basic ${token}`,
+				authorization: `Basic ${token}`
 			},
-			httpsAgent: new https.Agent({ rejectUnauthorized: false }),
-			data: data,
+			data: user_data,
 		});
-
-
-		//create a  client
+		/*//create a  client
 
 		const client_data = {
 			officeId:  1, //req
@@ -115,8 +111,9 @@ const today = new Date().toLocaleDateString("en-GB", {
 			familyMembers:[],
 			address:  [],	
 		};
+
 		const register_client= await Axios({
-			method: "post",
+			method: "POST",
 			httpsAgent: new https.Agent({ rejectUnauthorized: false }),
 			url: `${config.mifosUrl}/clients`,
 			headers: {
@@ -124,21 +121,15 @@ const today = new Date().toLocaleDateString("en-GB", {
 				"Fineract-Platform-TenantId": `${config.mifosTenantId}`,
 				authorization: `Basic ${token}`,
 			},
-			data: client_data,
+			data:
 			
 		});
-   
-		console.log(body.firstName);
-		//create user and client in database
-		const user = await MifosUser.create({
+	//create user and client in database
+	/*	const user = await MifosUser.create({
 			userId: register.data.resourceId,
-			firstName:body.firstname,
-			lastName:body.lastname,
-			phoneNumber:body.mobileNo,
-			emailAddress:body.email,
 			clientId: register_client.data.clientId,
 			username: body.username,
-		});
+		});*/
 		return res.json({
 			status: "success",
 			result: {...user, ...register.data},
@@ -414,21 +405,6 @@ module.exports.loan_application = async (req, res, next) => {
 	try {
 
 		let data=req.body;
-		/*let clientId = req.params.id;
-		let productId = req.body.productId;
-		let principal = req.body.principal;
-		let loanTermFrequency = req.body.loanTermFrequency;
-		let loanTermFrequencyType = req.body.loanTermFrequencyType;
-		let numberOfRepayments = req.body.numberOfRepayments;
-		let interestRatePerPeriod = req.body.interestRatePerPeriod;
-		let repaymentEvery = req.body.repaymentEvery;
-		let repaymentFrequencyType = req.body.repaymentFrequencyType;
-		let amortizationType = req.body.amortizationType;
-		let isEqualAmortization = req.body.isEqualAmortization;
-		let interestType = req.body.interestType;
-		let interestCalculationPeriodType = req.body.interestCalculationPeriodType;
-		let transactionProcessingStrategyId =req.body.transactionProcessingStrategyId;
-		let allowPartialPeriodInterestCalcualtion =req.body.allowPartialPeriodInterestCalcualtion;*/
 
 		const base64AunthenticationKey = req.headers["access-token"];
 
@@ -438,33 +414,6 @@ module.exports.loan_application = async (req, res, next) => {
 			month: "long",
 			year: "numeric",
 		});
-
-	/*	const data = {
-			"clientId": `${clientId}`,
-			"productId": productId,
-			"disbursementData": [],
-			"fundId": 1,
-			"principal": principal,
-			"loanTermFrequency": loanTermFrequency,
-			"loanTermFrequencyType": loanTermFrequencyType,
-			"numberOfRepayments": numberOfRepayments,
-			"repaymentEvery": repaymentEvery,
-			"repaymentFrequencyType": repaymentFrequencyType,
-			"interestRatePerPeriod": interestRatePerPeriod,
-			"amortizationType": amortizationType,
-			"isEqualAmortization": isEqualAmortization,
-			"interestType": interestType,
-			"interestCalculationPeriodType":interestCalculationPeriodType,
-			"allowPartialPeriodInterestCalcualtion":allowPartialPeriodInterestCalcualtion,
-			"transactionProcessingStrategyId":transactionProcessingStrategyId,
-			"charges":[{"chargeId":2,"amount":1}],
-			"locale":"en",
-			"dateFormat":"dd MMMM yyyy",
-			"loanType":"individual",
-			"expectedDisbursementDate":`${today}`,
-			"submittedOnDate":`${today}`
-
-			};*/
 
 	console.log(data);
 		await Axios({
