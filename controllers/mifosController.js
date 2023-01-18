@@ -127,10 +127,15 @@ const today = new Date().toLocaleDateString("en-GB", {
 			data: client_data,
 			
 		});
-
+   
+		console.log(body.firstName);
 		//create user and client in database
 		const user = await MifosUser.create({
 			userId: register.data.resourceId,
+			firstName:body.firstname,
+			lastName:body.lastname,
+			phoneNumber:body.mobileNo,
+			emailAddress:body.email,
 			clientId: register_client.data.clientId,
 			username: body.username,
 		});
@@ -465,6 +470,7 @@ module.exports.loan_application = async (req, res, next) => {
 		await Axios({
 			method: "POST",
 			url: url,
+			httpsAgent: new https.Agent({ rejectUnauthorized: false }),
 			headers: {
 				"Fineract-Platform-TenantId": `${config.mifosTenantId}`,
 				authorization: "Basic " + base64AunthenticationKey,

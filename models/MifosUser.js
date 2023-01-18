@@ -21,6 +21,28 @@ module.exports.MifosUserModel = (sequelize) => {
             clientId: {
                 type: DataTypes.STRING,
             },
+            firstName:
+            {
+                type:DataTypes.STRING,
+                allowNull:false,
+
+            },
+            lastName:
+            {
+                type:DataTypes.STRING,
+                allowNull:false,
+            },
+            phoneNumber:
+            {
+                type:DataTypes.INTEGER,
+                allowNull:false,
+            },
+            emailAddress:
+            {
+                type:DataTypes.STRING,
+                allowNull:false,
+            },
+            
         },
         {
             // Other model options go here
