@@ -202,6 +202,7 @@ module.exports.listing = async (req, res, next) => {
 				"Fineract-Platform-TenantId": `${config.mifosTenantId}`,
 				Authorization: "Basic " + base64AunthenticationKey,
 			},
+			httpsAgent: new https.Agent({ rejectUnauthorized: false })
 		}).then((response) => {
 			res.json({
 				status: "success",
