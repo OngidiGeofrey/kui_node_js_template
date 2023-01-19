@@ -51,7 +51,7 @@ const MifosUser = MifosUserModel(sequelize);
 
 const migrateDb = process.env.MIGRATE_DB || configs.database.migrate;
 if (migrateDb == "TRUE") {
-	sequelize.sync({force:true,alter:true}).then(() => {
+sequelize.sync({force:true,alter:true}).then(() => {
 		console.log(`All tables synced!`);
 		process.exit(0);
 	});

@@ -67,35 +67,38 @@ module.exports.register = async (req, res, next) => {
 		// create a user
 
 		let user_data = {
-			username: body.username,
-			firstname: body.firstname,
-			lastname: body.lastname,
-			password : body.password,
-			repeatPassword: body.repeatPassword,
-			email: body.email,
-			password: body.password,
-			repeatPassword: body.repeatPassword,
+			username: req.body.username,
+			firstname: req.body.firstname,
+			lastname: req.body.lastname,
+			password : req.body.password,
+			repeatPassword: req.body.repeatPassword,
+			email: req.body.email,
+			password: req.body.password,
+			repeatPassword: req.body.repeatPassword,
 			officeId: 1,
 			staffId: 1,
-			roles: body.roles || ["2", "2"],
+			roles:[2],
 			sendPasswordToEmail: false,
 			
 		};
 		console.log(user_data)
 
-		const register = await Axios({
-			method: "post",
-			httpsAgent: new https.Agent({ rejectUnauthorized:false}),
-			url: `${config.mifosUrl}/users`,
-			
-			headers: {
-				"Content-Type": "application/json",
-				"Fineract-Platform-TenantId": `${config.mifosTenantId}`,
-				authorization: `Basic ${token}`
-			},
-			data: user_data,
-		});
-		/*//create a  client
+			const register = await Axios({
+				method: "POST",
+				httpsAgent: new https.Agent({
+					rejectUnauthorized:false
+				}),
+				url: `${config.mifosUrl}/users`,
+				headers: {
+					"Content-Type": "application/json",
+					"Fineract-Platform-TenantId": `${config.mifosTenantId}`,
+					authorization: `Basic ${token}`
+				},
+				data: user_data,
+			});
+			console.log(user_data);
+			console.log(register);
+		//create a  client
 
 		const client_data = {
 			officeId:  1, //req
@@ -121,21 +124,24 @@ module.exports.register = async (req, res, next) => {
 				"Fineract-Platform-TenantId": `${config.mifosTenantId}`,
 				authorization: `Basic ${token}`,
 			},
-			data:
+			data:client_data
 			
 		});
+		console.log(client_data);
+		console.log(register_client);
+		
 	//create user and client in database
-	/*	const user = await MifosUser.create({
+		const user = await MifosUser.create({
 			userId: register.data.resourceId,
 			clientId: register_client.data.clientId,
 			username: body.username,
-		});*/
+		});
 		return res.json({
 			status: "success",
 			result: {...user, ...register.data},
 		});
 	} catch (err) {
-		return next(err);
+		// return next(err);
 	}
 };
 
