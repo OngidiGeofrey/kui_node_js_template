@@ -504,3 +504,28 @@ module.exports.amortization_schedule = async (req, res, next) => {
 		return next(err);
 	}
 };
+
+
+
+//retrieve client profile
+
+module.exports.retrieve_client_profile = async (req, res, next) => {
+
+	const user = await MifosUser.findOne({
+		where: {
+			clientId: req.params.id
+		},
+	});
+
+	if(user)
+	{
+		res.json({
+			result_code:0,
+			status: "client  retrived",
+			result: {...user},
+		});
+
+	}
+	
+		
+};
