@@ -280,7 +280,6 @@ module.exports.client_accounts = async (req, res, next) => {
 			const client_loans = await MifosLoan.findAll({
 				where: {
 					clientId: client_id,
-					
 				},
 			});
 
