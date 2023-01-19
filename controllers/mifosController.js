@@ -3,6 +3,7 @@ const config = require("../config.json");
 const { MifosUser,MifosLoan } = require("../db");
 const https = require('node:https');
 var JSON = require("querystring");
+const { isEmpty } = require("lodash");
 
 require("dotenv").config();
 
@@ -272,8 +273,30 @@ module.exports.get_loan_applications = async (req, res, next) => {
 // retrieve client loans account
 module.exports.client_accounts = async (req, res, next) => {
 	try {
-
 		let client_id = req.params.id;
+		if(isEmpty(req.body))
+		{	
+
+			const client_loans = await MifosLoan.findAll({
+				where: {
+					clientId: client_id,
+					
+				},
+			});
+
+			if(client_loans)
+			{
+				res.json({
+					resCode:0,
+					status: "success",
+					result: {...client_loans},
+				});
+			}
+			console.log("null value");
+
+		}
+		else{
+			
 		let query_param=req.body.filter;
 
 		// Check the user in the database
@@ -300,6 +323,11 @@ module.exports.client_accounts = async (req, res, next) => {
 			});
 		}
 		console.log(client_loans);
+
+		}
+
+		
+		
 	} catch (err) {
 		return next(err);
 	}
