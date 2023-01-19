@@ -291,8 +291,6 @@ module.exports.client_accounts = async (req, res, next) => {
 					result: [...client_loans],
 				});
 			}
-			//console.log("null value");
-
 		}
 		else{
 			
@@ -483,6 +481,7 @@ module.exports.loan_application = async (req, res, next) => {
 		//declare and initialize variables that stores disbursement data
 			const accountNumber= req.body.accountNumber;
 			const paymentTypeId= req.body.paymentTypeId;
+			const loanName=req.body.loanName;
 			const base64AunthenticationKey = req.headers["access-token"];
 			const url = `${config.mifosUrl}/loans`;
 			const today = new Date().toLocaleDateString("en-GB", {
@@ -517,6 +516,8 @@ module.exports.loan_application = async (req, res, next) => {
 			accountNumber: accountNumber,
 			paymentTypeId: paymentTypeId,
 			principal:	req.body.principal,
+			loanName: loanName
+			
 		});
 		return res.json({
 			result_code: 0,

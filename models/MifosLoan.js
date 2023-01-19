@@ -18,6 +18,11 @@ module.exports.MifosLoanModel = (sequelize) => {
                 type: DataTypes.INTEGER,
                 allowNull: false,
             },
+
+            loanName: {
+                type: DataTypes.STRING,
+                allowNull: true,
+            },
             loanStatus: {
                 type: DataTypes.STRING,
             },
