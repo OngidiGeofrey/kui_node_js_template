@@ -47,4 +47,6 @@ router.post('/get-loan-statement/:id', mifosController.getLoanStatement);
 //retrieve client profile details.
 router.post('/profile/:id', mifosController.retrieve_client_profile);
 
+//retrieve client profile details.
+router.post('/paymenttypes', mifosController.paymenttypes);
 module.exports = router;

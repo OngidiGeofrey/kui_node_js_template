@@ -299,30 +299,7 @@ module.exports.client_accounts = async (req, res, next) => {
 				//result: {...client_loans},
 			});
 		}
-
 		console.log(client_loans);
-
-
-		
-	/*	let client_id = req.body;
-		const base64AunthenticationKey = req.headers["access-token"];
-		const url = `${config.mifosUrl}/clients/${client__id}/accounts`;
-
-		await Axios({
-			method: "GET",
-			url: url,
-			headers: {
-				"Content-Type": "application/json",
-				"Fineract-Platform-TenantId": `${config.mifosTenantId}`,
-				Authorization: "Basic " + base64AunthenticationKey,
-			},
-			httpsAgent: new https.Agent({ rejectUnauthorized: false })
-		}).then((response) => {
-			res.json({
-				status: "success",
-				result: response.data,
-			});
-		});*/
 	} catch (err) {
 		return next(err);
 	}
@@ -552,6 +529,33 @@ module.exports.getLoanStatement = async (req, res, next) => {
 	}
 };
 
+
+
+//retrieve the paymenttypes
+module.exports.paymenttypes = async (req, res, next) => {
+	try {
+		const accessToken = req.headers["access-token"];
+		const url = `${config.mifosUrl}/paymenttypes`;
+		await Axios({
+			method: "GET",
+			url: url,
+			headers: {
+				"Content-Type": "application/json",
+				"Fineract-Platform-TenantId": `${config.mifosTenantId}`,
+				Authorization: `Basic ${accessToken}`,
+			},
+			httpsAgent: new https.Agent({ rejectUnauthorized: false })
+		}).then((response) => {
+			res.json({
+				status: "success",
+				result: response.data,
+			});
+		});
+	} catch (err) {
+		return next(err);
+	}
+};
+
 //calculate amortization schedule
 module.exports.amortization_schedule = async (req, res, next) => {
 	try {
@@ -594,7 +598,6 @@ module.exports.retrieve_client_profile = async (req, res, next) => {
 			status: "client retrieved",
 			result: {...user},
 		});
-
 	}
 	else{
 		res.json({
@@ -603,3 +606,6 @@ module.exports.retrieve_client_profile = async (req, res, next) => {
 		});
 	}	
 };
+
+
+
