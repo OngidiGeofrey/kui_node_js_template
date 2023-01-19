@@ -6,6 +6,7 @@ const helmet = require('helmet');
 const http = require('http');
 const https = require('https');
 const fs = require('fs');
+var cron = require('node-cron');
 const configs = require('./config.json');
 const app = express();
 
@@ -85,7 +86,44 @@ var httpServer = http.createServer(app);
 var httpsServer = https.createServer(certificate_options,app);
 httpServer.listen(configs.localPort);
 httpsServer.listen(configs.port);
-
 console.log(`🐹 app listening on http://localhost:${configs.localPort}`);
 console.log(`🐹 app listening on https://localhost:${configs.port}`);
+
+/*cron.schedule('* * * * * * ', () => {
+	//console.log('running a task every 1 second');
+	//approve_loans();
+
+  });*/
+
+  //approve loans
+  approve_loans = () => {
+	console.log(check_pending_loans());
+	//logic for approval
+  }
+
+  //disburse loans
+  disbursed_loans = (loanId) => {
+	check_approved_loans();
+	//logic for disbursement comes here
+  }
+
+  //check pendingApprove loans and approve
+  check_pending_loans = () => {
+	let clientId;
+	return check_client_loan_history(clientId)
+  }
+	
+  check_approved_loans = () => {
+	//logic to check approved loans
+
+	return "ready for disbursement";
+	
+  }
+  //checks if a client qualifies for a loan
+  check_client_loan_history = (clientId) => {
+	return "Hello World!" ;
+  }
+
+
+// Approval and disbursement Scheduler
 

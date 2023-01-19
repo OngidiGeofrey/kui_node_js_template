@@ -288,10 +288,10 @@ module.exports.client_accounts = async (req, res, next) => {
 				res.json({
 					resCode:0,
 					status: "success",
-					result: {...client_loans},
+					result: [...client_loans],
 				});
 			}
-			console.log("null value");
+			//console.log("null value");
 
 		}
 		else{
@@ -311,7 +311,7 @@ module.exports.client_accounts = async (req, res, next) => {
 			res.json({
 				resCode:0,
 				status: "success",
-				result: {...client_loans},
+				result: [...client_loans],
 			});
 		}
 		else{
