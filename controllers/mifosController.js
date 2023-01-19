@@ -556,8 +556,6 @@ module.exports.getLoanStatement = async (req, res, next) => {
 	}
 };
 
-
-
 //retrieve the paymenttypes
 module.exports.paymenttypes = async (req, res, next) => {
 	try {
