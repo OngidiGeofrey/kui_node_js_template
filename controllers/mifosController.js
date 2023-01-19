@@ -505,8 +505,6 @@ module.exports.amortization_schedule = async (req, res, next) => {
 	}
 };
 
-
-
 //retrieve client profile
 
 module.exports.retrieve_client_profile = async (req, res, next) => {
@@ -516,15 +514,20 @@ module.exports.retrieve_client_profile = async (req, res, next) => {
 			clientId: req.params.id
 		},
 	});
-
 	if(user)
 	{
 		res.json({
 			result_code:0,
-			status: "client  retrived",
+			status: "client retrieved",
 			result: {...user},
 		});
 
+	}
+	else{
+		res.json({
+			result_code:404,
+			status: "client not found",
+		});
 	}
 	
 		
