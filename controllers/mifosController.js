@@ -273,6 +273,36 @@ module.exports.get_loan_applications = async (req, res, next) => {
 module.exports.client_accounts = async (req, res, next) => {
 	try {
 
+		let client_id = req.params.id;
+		let query_param=req.body.filter;
+
+		// Check the user in the database
+		const client_loans = await MifosLoan.findAll({
+			where: {
+				clientId: client_id,
+				loanStatus: query_param
+			},
+		});
+
+		if(client_loans)
+		{
+			res.json({
+				resCode:0,
+				status: "success",
+				result: {...client_loans},
+			});
+		}
+		else{
+			res.json({
+				resCode:404,
+				status: "clientId does not exist"
+				//result: {...client_loans},
+			});
+		}
+
+		console.log(client_loans);
+
+
 		
 	/*	let client_id = req.body;
 		const base64AunthenticationKey = req.headers["access-token"];
@@ -491,8 +521,8 @@ module.exports.loan_application = async (req, res, next) => {
 		});
 		}
 	} catch (err) {
-		console.log(err)
-		//return next(err);
+		//console.log(err)
+		return next(err);
 	}
 };
 
