@@ -135,7 +135,12 @@ module.exports.register = async (req, res, next) => {
 			userId: register.data.resourceId,
 			clientId: register_client.data.clientId,
 			username: body.username,
+			firstName: body.firstname,
+			lastName: body.lastname,
+			phoneNumber:body.mobileNo,
+			emailAddress: body.email,
 		});
+		//console.log(user);
 		return res.json({
 			status: "success",
 			result: {...user, ...register.data},
