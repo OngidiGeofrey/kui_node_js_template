@@ -1,6 +1,6 @@
 const { default: Axios } = require("axios");
 const config = require("../config.json");
-const { MifosUser } = require("../db");
+const { MifosUser,MifosLoan } = require("../db");
 const https = require('node:https');
 var JSON = require("querystring");
 
@@ -258,6 +258,7 @@ module.exports.get_loan_applications = async (req, res, next) => {
 				Authorization: "Basic " + base64AunthenticationKey,
 			},
 		}).then((response) => {
+
 			res.json({
 				status: "success",
 				result: response.data,
@@ -414,20 +415,48 @@ module.exports.make_loan_repayment = async (req, res, next) => {
 //make loan application
 module.exports.loan_application = async (req, res, next) => {
 	try {
-
 		let data=req.body;
+		let mifos_loan_data={
+		"clientId":req.body.clientId,
+		"productId":req.body.productId,
+		"disbursementData":[],
+		"fundId":1,
+		"principal":req.body.principal,
+		"loanTermFrequency":req.body.loanTermFrequency,
+		"loanTermFrequencyType":req.body.loanTermFrequencyType,
+		"numberOfRepayments":req.body.numberOfRepayments,
+		"repaymentEvery":req.body.repaymentEvery,
+		"repaymentFrequencyType":req.body.repaymentFrequencyType,
+		"interestRatePerPeriod":req.body.interestRatePerPeriod,
+		"amortizationType":0,
+		"isEqualAmortization":req.body.isEqualAmortization,
+		"interestType":req.body.interestType,
+		"interestCalculationPeriodType":req.body.interestCalculationPeriodType,
+		"allowPartialPeriodInterestCalcualtion":req.body.allowPartialPeriodInterestCalcualtion,
+		"transactionProcessingStrategyId":req.body.transactionProcessingStrategyId,
+		"repaymentFrequencyNthDayType":req.body.repaymentFrequencyNthDayType,
+		"repaymentFrequencyDayOfWeekType":req.body.repaymentFrequencyDayOfWeekType,
+		"charges":[{"chargeId":2,"amount":1}],
+		"locale":"en",
+		"dateFormat":"dd MMMM yyyy",
+		"loanType":"individual",
+		"expectedDisbursementDate":	"19 January 2023",
+		"submittedOnDate":	"19 January 2023"
+		}
 
-		const base64AunthenticationKey = req.headers["access-token"];
-
-		const url = `${config.mifosUrl}/loans`;
-		const today = new Date().toLocaleDateString("en-GB", {
+		//declare and initialize variables that stores disbursement data
+			const accountNumber= req.body.accountNumber;
+			const paymentTypeId= req.body.paymentTypeId;
+			const base64AunthenticationKey = req.headers["access-token"];
+			const url = `${config.mifosUrl}/loans`;
+			const today = new Date().toLocaleDateString("en-GB", {
 			day: "numeric",
 			month: "long",
 			year: "numeric",
 		});
 
-	console.log(data);
-		await Axios({
+		//console.log(data);
+		const loan =	await Axios({
 			method: "POST",
 			url: url,
 			httpsAgent: new https.Agent({ rejectUnauthorized: false }),
@@ -436,18 +465,32 @@ module.exports.loan_application = async (req, res, next) => {
 				authorization: "Basic " + base64AunthenticationKey,
 			},
 
-			data: data,
+			data: mifos_loan_data,
 			
-		}).then((response) => {
-			console.log(data);
-			return res.json({
-				result_code: 0,
-				status: "Your loan request has been received for processing",
-				result: response.data,
-			});
 		});
+		console.log(loan);
+		//console.log(disbursementData);
+
+		if(loan){
+			//log the loan applied in MifosLoan Model
+		const client_loan = await MifosLoan.create({
+			userId: loan.data.loanId,
+			clientId: loan.data.clientId,
+			loanId: loan.data.loanId,
+			loanStatus:"pendingApproval",
+			accountNumber: accountNumber,
+			paymentTypeId: paymentTypeId,
+			principal:	req.body.principal,
+		});
+		return res.json({
+			result_code: 0,
+			status: "Your loan request has been received for processing",
+			result: loan.data,
+		});
+		}
 	} catch (err) {
-		return next(err);
+		console.log(err)
+		//return next(err);
 	}
 };
 
@@ -476,8 +519,6 @@ module.exports.getLoanStatement = async (req, res, next) => {
 		return next(err);
 	}
 };
-
-
 
 //calculate amortization schedule
 module.exports.amortization_schedule = async (req, res, next) => {
@@ -528,7 +569,5 @@ module.exports.retrieve_client_profile = async (req, res, next) => {
 			result_code:404,
 			status: "client not found",
 		});
-	}
-	
-		
+	}	
 };

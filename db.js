@@ -49,9 +49,12 @@ if(fs.existsSync('/etc/pki/tls/private/digitallending.chamasoft.com.key')) {
 const { MifosUserModel } = require("./models/MifosUser");
 const MifosUser = MifosUserModel(sequelize);
 
+const { MifosLoanModel } = require("./models/MifosLoan");
+const MifosLoan = MifosLoanModel(sequelize);
+
 const migrateDb = process.env.MIGRATE_DB || configs.database.migrate;
 if (migrateDb == "TRUE") {
-sequelize.sync({force:true,alter:true}).then(() => {
+sequelize.sync({alter:true}).then(() => {
 		console.log(`All tables synced!`);
 		process.exit(0);
 	});
@@ -59,4 +62,5 @@ sequelize.sync({force:true,alter:true}).then(() => {
 
 module.exports = {
 	MifosUser,
+	MifosLoan
 };
