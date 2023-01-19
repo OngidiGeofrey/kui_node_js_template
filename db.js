@@ -34,8 +34,6 @@ if(fs.existsSync('/etc/pki/tls/private/digitallending.chamasoft.com.key')) {
 
 }
 
-
-
 (async () => {
 	try {
 		await sequelize.authenticate();

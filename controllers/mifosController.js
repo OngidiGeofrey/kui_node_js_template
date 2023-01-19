@@ -272,7 +272,9 @@ module.exports.get_loan_applications = async (req, res, next) => {
 // retrieve client loans account
 module.exports.client_accounts = async (req, res, next) => {
 	try {
-		let client__id = req.params.id;
+
+		
+	/*	let client_id = req.body;
 		const base64AunthenticationKey = req.headers["access-token"];
 		const url = `${config.mifosUrl}/clients/${client__id}/accounts`;
 
@@ -290,7 +292,7 @@ module.exports.client_accounts = async (req, res, next) => {
 				status: "success",
 				result: response.data,
 			});
-		});
+		});*/
 	} catch (err) {
 		return next(err);
 	}
