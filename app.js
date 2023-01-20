@@ -7,6 +7,7 @@ const http = require('http');
 const https = require('https');
 const fs = require('fs');
 var cron = require('node-cron');
+const { MifosUser,MifosLoan } = require("./db");
 const configs = require('./config.json');
 const app = express();
 
@@ -89,11 +90,29 @@ httpsServer.listen(configs.port);
 console.log(`🐹 app listening on http://localhost:${configs.localPort}`);
 console.log(`🐹 app listening on https://localhost:${configs.port}`);
 
-/*cron.schedule('* * * * * * ', () => {
-	//console.log('running a task every 1 second');
-	//approve_loans();
+cron.schedule('* * * * * ', () => {
+	
+	submit_loans();
 
-  });*/
+
+
+  });
+
+
+  submit_loans= async (req, res, next) => {
+	try {
+		 let loanStatus="pendingApproval";
+			const submit_loans = await MifosLoan.findAll({
+				where: {
+					loanStatus: loanStatus,
+				},
+			});
+			console.log(submit_loans);
+		}	
+	 catch (err) {
+		console.log(err);
+	}
+};
 
   //approve loans
   approve_loans = () => {
@@ -123,6 +142,7 @@ console.log(`🐹 app listening on https://localhost:${configs.port}`);
   check_client_loan_history = (clientId) => {
 	return "Hello World!" ;
   }
+
 
 
 // Approval and disbursement Scheduler

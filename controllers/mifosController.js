@@ -450,7 +450,41 @@ module.exports.make_loan_repayment = async (req, res, next) => {
 module.exports.loan_application = async (req, res, next) => {
 	try {
 		let data=req.body;
-		let mifos_loan_data={
+
+
+		const clientId=req.body.clientId;
+		const productId=req.body.productId;
+		const today = new Date().toLocaleDateString("en-GB", {
+			day: "numeric",
+			month: "long",
+			year: "numeric",
+		});
+		//"disbursementData":[],
+		const fundId=1;
+		let principal=req.body.principal;
+		let loanTermFrequency=req.body.loanTermFrequency;
+		let loanTermFrequencyType=req.body.loanTermFrequencyType;
+		let numberOfRepayments=req.body.numberOfRepayments;
+		let repaymentEvery=req.body.repaymentEvery;
+		let repaymentFrequencyType=req.body.repaymentFrequencyType;
+		let interestRatePerPeriod=req.body.interestRatePerPeriod;
+		let amortizationType=0;
+		let  isEqualAmortization=req.body.isEqualAmortization;
+		let interestType=req.body.interestType;
+		let interestCalculationPeriodType=req.body.interestCalculationPeriodType;
+		let allowPartialPeriodInterestCalcualtion=req.body.allowPartialPeriodInterestCalcualtion;
+		let transactionProcessingStrategyId=req.body.transactionProcessingStrategyId;
+		let repaymentFrequencyNthDayType=req.body.repaymentFrequencyNthDayType;
+		let repaymentFrequencyDayOfWeekType=req.body.repaymentFrequencyDayOfWeekType;
+		const chargeId=req.body.chargeId;
+		const amount=req.body.amount;
+		let locale="en";
+		let dateFormat="dd MMMM yyyy";
+		let loanType="individual";
+		let expectedDisbursementDate=today;
+		let submittedOnDate=today;
+		console.log(submittedOnDate);
+		/*let mifos_loan_data={
 		"clientId":req.body.clientId,
 		"productId":req.body.productId,
 		"disbursementData":[],
@@ -476,7 +510,7 @@ module.exports.loan_application = async (req, res, next) => {
 		"loanType":"individual",
 		"expectedDisbursementDate":	"19 January 2023",
 		"submittedOnDate":	"19 January 2023"
-		}
+		}*/
 
 		//declare and initialize variables that stores disbursement data
 			const accountNumber= req.body.accountNumber;
@@ -484,14 +518,10 @@ module.exports.loan_application = async (req, res, next) => {
 			const loanName=req.body.loanName;
 			const base64AunthenticationKey = req.headers["access-token"];
 			const url = `${config.mifosUrl}/loans`;
-			const today = new Date().toLocaleDateString("en-GB", {
-			day: "numeric",
-			month: "long",
-			year: "numeric",
-		});
+			
 
 		//console.log(data);
-		const loan =	await Axios({
+	/*	const loan =	await Axios({
 			method: "POST",
 			url: url,
 			httpsAgent: new https.Agent({ rejectUnauthorized: false }),
@@ -503,28 +533,48 @@ module.exports.loan_application = async (req, res, next) => {
 			data: mifos_loan_data,
 			
 		});
-		console.log(loan);
+		console.log(loan);*/
 		//console.log(disbursementData);
 
-		if(loan){
+	//	if(loan){
 			//log the loan applied in MifosLoan Model
 		const client_loan = await MifosLoan.create({
-			userId: loan.data.loanId,
-			clientId: loan.data.clientId,
-			loanId: loan.data.loanId,
+			clientId: clientId,
 			loanStatus:"pendingApproval",
 			accountNumber: accountNumber,
 			paymentTypeId: paymentTypeId,
 			principal:	req.body.principal,
-			loanName: loanName
-			
+			loanName: loanName,
+			fundId: fundId,
+			loanTermFrequency: loanTermFrequency,
+			loanTermFrequencyType: loanTermFrequencyType,
+			numberOfRepayments: numberOfRepayments,
+			repaymentEvery: repaymentEvery,
+			repaymentFrequencyType: repaymentFrequencyType,
+			interestRatePerPeriod: interestRatePerPeriod,
+			amortizationType: amortizationType,
+			interestRatePerPeriod: interestRatePerPeriod,
+			amortizationType: amortizationType,
+			isEqualAmortization: isEqualAmortization,
+			interestType: interestType,
+			interestCalculationPeriodType: interestCalculationPeriodType,
+			allowPartialPeriodInterestCalcualtion: allowPartialPeriodInterestCalcualtion,
+			transactionProcessingStrategyId: transactionProcessingStrategyId,
+			repaymentFrequencyNthDayType: repaymentFrequencyNthDayType,
+			repaymentFrequencyDayOfWeekType: repaymentFrequencyDayOfWeekType,
+			chargeId: chargeId,
+			amount: amount,
+			submittedOnDate:today,
+			expectedDisbursementDate:today,
+			dateFormat: dateFormat,
+			locale: locale,
 		});
 		return res.json({
 			result_code: 0,
 			status: "Your loan request has been received for processing",
-			result: loan.data,
+			result: client_loan,//loan.data,
 		});
-		}
+		//}
 	} catch (err) {
 		//console.log(err)
 		return next(err);
