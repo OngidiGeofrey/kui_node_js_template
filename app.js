@@ -1,4 +1,4 @@
-require('dotenv').config();
+ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
@@ -6,8 +6,10 @@ const helmet = require('helmet');
 const http = require('http');
 const https = require('https');
 const fs = require('fs');
+const { default: Axios } = require("axios");
+var JSON = require("querystring");
 var cron = require('node-cron');
-const { MifosUser,MifosLoan } = require("./db");
+const { MifosUser,MifosLoan} = require("./db");
 const configs = require('./config.json');
 const app = express();
 
@@ -39,6 +41,7 @@ app.get('/', (req, res, next) => {
 // const taskRoute = require('./routes/taskRoute');
 // const userRoute = require('./routes/userRoute');
 const mifosRoute = require('./routes/mifosRoute');
+const { config } = require('dotenv');
 app.use('/api', [ mifosRoute]); // you can add more routes in this array
 
 
@@ -90,59 +93,151 @@ httpsServer.listen(configs.port);
 console.log(`🐹 app listening on http://localhost:${configs.localPort}`);
 console.log(`🐹 app listening on https://localhost:${configs.port}`);
 
-cron.schedule('* * * * * ', () => {
+//scheduler
+
+cron.schedule('*/1 * * * *', () => {
 	
 	submit_loans();
-
-
 
   });
 
   submit_loans= async (req, res, next) => {
 	try {
-		 let loanStatus="awaiting";
-			const submit_loans= await MifosLoan.findAll({
-				where: {
-					loanStatus: loanStatus,
-				},
-			})
-			console.log([...submit_loans]);
+
+		
+		console.log(configs.non_working_days);
+
+		//finds the current day e.g Saturday
+		var currentDay=new Date().toLocaleDateString('en-US', { weekday: 'long' });
+
+		//finds current date e.g 20th January 2023
+
+		const todayDate = new Date().toLocaleDateString("en-GB", {
+			day: "numeric",
+			month: "long",
+			year: "numeric",
+		});
+		console.log(todayDate)
+
+		//check if current day or current date is blacklisted
+		if(configs.non_working_days.includes(todayDate) || configs.non_working_days.includes(currentDay))
+		{
+			console.log("cron job will run on a working day")
+
+		}
+		// scheduler runs in this block 
+		else
+		{
+
+				// fetch all awaiting loans
+				let loanStatus="awaiting";
+				const awaiting_loans= await MifosLoan.findAll({
+					where: {
+						loanStatus: loanStatus,
+					},
+					limit:10
+				})
+				var obj=[...awaiting_loans] ;
+	
+				// check if there exist awaiting loans
+				if(obj.length!=0)
+				{
+					//iterate through an array
+					obj.forEach(async object =>{
+	
+						// fetch loan items to be submitted to mifos
+					 const 	data={
+							clientId:object.dataValues.clientId,
+							productId:object.dataValues.productId,
+							disbursementData:[],
+							fundId:object.dataValues.fundId,
+							principal:object.dataValues.principal,
+							loanTermFrequency:object.dataValues.loanTermFrequency,
+							loanTermFrequencyType:object.dataValues.loanTermFrequencyType,
+							numberOfRepayments:object.dataValues.numberOfRepayments,
+							repaymentEvery:object.dataValues.repaymentEvery,
+							repaymentFrequencyType:object.dataValues.repaymentFrequencyType,
+							interestRatePerPeriod:object.dataValues.interestRatePerPeriod,
+							amortizationType:object.dataValues.amortizationType,
+							isEqualAmortization:false,
+							interestType:object.dataValues.interestType,
+							interestCalculationPeriodType:object.dataValues.interestCalculationPeriodType,
+							allowPartialPeriodInterestCalcualtion:false,
+							transactionProcessingStrategyId:object.dataValues.transactionProcessingStrategyId,
+							repaymentFrequencyNthDayType:object.dataValues.repaymentFrequencyNthDayType,
+							repaymentFrequencyDayOfWeekType:object.dataValues.repaymentFrequencyDayOfWeekType,
+							charges:[{"chargeId": object.dataValues.chargeId,"amount":object.dataValues.amount}],
+							locale:"en",
+							dateFormat:"dd MMMM yyyy",
+							loanType:"individual",
+							expectedDisbursementDate:object.dataValues.expectedDisbursementDate,
+							submittedOnDate:object.dataValues.submittedOnDate
+	
+						}
+						console.log(data)
+	
+					//	submit loans to mifos
+						const url = `${configs.mifosUrl}/loans`;
+						await Axios({
+							method: "POST",
+							url: url,
+							httpsAgent: new https.Agent({ rejectUnauthorized: false }),
+							headers: {
+								"Fineract-Platform-TenantId": `${configs.mifosTenantId}`,
+								authorization: "Basic "+configs.mifosAdminTenantkey,
+							},
+							data: data,
+							
+						}).then(async (response) => {
+							if(response){
+	
+								console.log(response.data)
+	
+							//update chamasoft db accordingly.
+							const MifosClient = await MifosLoan.update(
+								{
+								  userId: response.data.resourceId,
+								  clientId: response.data.clientId,
+								  loanId: response.data.loanId,
+								  loanStatus:configs.pendingStatus,
+								  officeId: response.data.officeId
+								},
+								{
+								  where: { clientId: response.data.clientId },
+								}
+							  );
+							  
+							 console.log(MifosClient)
+	
+	
+							}
+							else
+							{
+								console.log("this loans will be submitted on Monday")
+							}
+	
+							
+	
+						});
+						//console.log(loan);
+	
+					
+	
+						//
+	
+					})
+	
+				}
+	
+				else{
+					console.log(" no awaiting record(s) found")
+				}
+		}
+		
 		}	
 	 catch (err) {
 		console.log(err);
 	}
 };
 
-  //approve loans
-  approve_loans = () => {
-	console.log(check_pending_loans());
-	//logic for approval
-  }
-
-  //disburse loans
-  disbursed_loans = (loanId) => {
-	check_approved_loans();
-	//logic for disbursement comes here
-  }
-
-  //check pendingApprove loans and approve
-  check_pending_loans = () => {
-	let clientId;
-	return check_client_loan_history(clientId)
-  }
-	
-  check_approved_loans = () => {
-	//logic to check approved loans
-
-	return "ready for disbursement";
-	
-  }
-  //checks if a client qualifies for a loan
-  check_client_loan_history = (clientId) => {
-	return "Hello World!" ;
-  }
-
-
-
-// Approval and disbursement Scheduler
 

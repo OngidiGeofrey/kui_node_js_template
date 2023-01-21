@@ -141,22 +141,6 @@ module.exports.MifosLoanModel = (sequelize) => {
                 type:DataTypes.STRING,
                 allowNull:true
             },
-            
-
-            
-            
-
-
-
-
-
-            
-            
-
-            
-
-            
-
         },
         {
             // Other model options go here

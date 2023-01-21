@@ -492,28 +492,9 @@ module.exports.loan_application = async (req, res, next) => {
 			const base64AunthenticationKey = req.headers["access-token"];
 			const url = `${config.mifosUrl}/loans`;
 			
-
-		//console.log(data);
-	/*	const loan =	await Axios({
-			method: "POST",
-			url: url,
-			httpsAgent: new https.Agent({ rejectUnauthorized: false }),
-			headers: {
-				"Fineract-Platform-TenantId": `${config.mifosTenantId}`,
-				authorization: "Basic " + base64AunthenticationKey,
-			},
-
-			data: mifos_loan_data,
-			
-		});
-		console.log(loan);*/
-		//console.log(disbursementData);
-
-	//	if(loan){
-			//log the loan applied in MifosLoan Model
 		const client_loan = await MifosLoan.create({
 			clientId: clientId,
-			loanStatus:"awaiting",
+			loanStatus:config.awaitingStatus,
 			accountNumber: accountNumber,
 			paymentTypeId: paymentTypeId,
 			principal:	req.body.principal,
