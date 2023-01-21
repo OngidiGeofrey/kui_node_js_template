@@ -460,7 +460,7 @@ module.exports.loan_application = async (req, res, next) => {
 			year: "numeric",
 		});
 		//"disbursementData":[],
-		const fundId=1;
+		const fundId=req.body.fundId;
 		const productId=req.body.productId;
 		let principal=req.body.principal;
 		let loanTermFrequency=req.body.loanTermFrequency;
@@ -469,7 +469,7 @@ module.exports.loan_application = async (req, res, next) => {
 		let repaymentEvery=req.body.repaymentEvery;
 		let repaymentFrequencyType=req.body.repaymentFrequencyType;
 		let interestRatePerPeriod=req.body.interestRatePerPeriod;
-		let amortizationType=0;
+		let amortizationType=req.body.amortizationType;
 		let isEqualAmortization=req.body.isEqualAmortization;
 		let interestType=req.body.interestType;
 		let interestCalculationPeriodType=req.body.interestCalculationPeriodType;
