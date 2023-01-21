@@ -130,10 +130,10 @@ cron.schedule('*/10 * * * *', () => {
 		{
 
 				// fetch all awaiting loans
-				let loanStatus="awaiting";
+				
 				const awaiting_loans= await MifosLoan.findAll({
 					where: {
-						loanStatus: loanStatus,
+						loanStatus: configs.awaitingStatus,
 					},
 					limit:10
 				})
@@ -219,12 +219,7 @@ cron.schedule('*/10 * * * *', () => {
 							
 	
 						});
-						//console.log(loan);
-	
-					
-	
-						//
-	
+						
 					})
 	
 				}
