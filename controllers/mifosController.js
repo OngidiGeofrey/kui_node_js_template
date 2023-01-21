@@ -453,7 +453,7 @@ module.exports.loan_application = async (req, res, next) => {
 
 
 		const clientId=req.body.clientId;
-		const productId=req.body.productId;
+		
 		const today = new Date().toLocaleDateString("en-GB", {
 			day: "numeric",
 			month: "long",
@@ -461,6 +461,7 @@ module.exports.loan_application = async (req, res, next) => {
 		});
 		//"disbursementData":[],
 		const fundId=1;
+		const productId=req.body.productId;
 		let principal=req.body.principal;
 		let loanTermFrequency=req.body.loanTermFrequency;
 		let loanTermFrequencyType=req.body.loanTermFrequencyType;
@@ -469,7 +470,7 @@ module.exports.loan_application = async (req, res, next) => {
 		let repaymentFrequencyType=req.body.repaymentFrequencyType;
 		let interestRatePerPeriod=req.body.interestRatePerPeriod;
 		let amortizationType=0;
-		let  isEqualAmortization=req.body.isEqualAmortization;
+		let isEqualAmortization=req.body.isEqualAmortization;
 		let interestType=req.body.interestType;
 		let interestCalculationPeriodType=req.body.interestCalculationPeriodType;
 		let allowPartialPeriodInterestCalcualtion=req.body.allowPartialPeriodInterestCalcualtion;
@@ -484,34 +485,6 @@ module.exports.loan_application = async (req, res, next) => {
 		let expectedDisbursementDate=today;
 		let submittedOnDate=today;
 		console.log(submittedOnDate);
-		/*let mifos_loan_data={
-		"clientId":req.body.clientId,
-		"productId":req.body.productId,
-		"disbursementData":[],
-		"fundId":1,
-		"principal":req.body.principal,
-		"loanTermFrequency":req.body.loanTermFrequency,
-		"loanTermFrequencyType":req.body.loanTermFrequencyType,
-		"numberOfRepayments":req.body.numberOfRepayments,
-		"repaymentEvery":req.body.repaymentEvery,
-		"repaymentFrequencyType":req.body.repaymentFrequencyType,
-		"interestRatePerPeriod":req.body.interestRatePerPeriod,
-		"amortizationType":0,
-		"isEqualAmortization":req.body.isEqualAmortization,
-		"interestType":req.body.interestType,
-		"interestCalculationPeriodType":req.body.interestCalculationPeriodType,
-		"allowPartialPeriodInterestCalcualtion":req.body.allowPartialPeriodInterestCalcualtion,
-		"transactionProcessingStrategyId":req.body.transactionProcessingStrategyId,
-		"repaymentFrequencyNthDayType":req.body.repaymentFrequencyNthDayType,
-		"repaymentFrequencyDayOfWeekType":req.body.repaymentFrequencyDayOfWeekType,
-		"charges":[{"chargeId":2,"amount":1}],
-		"locale":"en",
-		"dateFormat":"dd MMMM yyyy",
-		"loanType":"individual",
-		"expectedDisbursementDate":	"19 January 2023",
-		"submittedOnDate":	"19 January 2023"
-		}*/
-
 		//declare and initialize variables that stores disbursement data
 			const accountNumber= req.body.accountNumber;
 			const paymentTypeId= req.body.paymentTypeId;
@@ -540,12 +513,13 @@ module.exports.loan_application = async (req, res, next) => {
 			//log the loan applied in MifosLoan Model
 		const client_loan = await MifosLoan.create({
 			clientId: clientId,
-			loanStatus:"pendingApproval",
+			loanStatus:"awaiting",
 			accountNumber: accountNumber,
 			paymentTypeId: paymentTypeId,
 			principal:	req.body.principal,
 			loanName: loanName,
 			fundId: fundId,
+			productId:productId,
 			loanTermFrequency: loanTermFrequency,
 			loanTermFrequencyType: loanTermFrequencyType,
 			numberOfRepayments: numberOfRepayments,

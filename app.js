@@ -98,16 +98,15 @@ cron.schedule('* * * * * ', () => {
 
   });
 
-
   submit_loans= async (req, res, next) => {
 	try {
-		 let loanStatus="pendingApproval";
-			const submit_loans = await MifosLoan.findAll({
+		 let loanStatus="awaiting";
+			const submit_loans= await MifosLoan.findAll({
 				where: {
 					loanStatus: loanStatus,
 				},
-			});
-			console.log(submit_loans);
+			})
+			console.log([...submit_loans]);
 		}	
 	 catch (err) {
 		console.log(err);

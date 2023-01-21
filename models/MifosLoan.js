@@ -82,7 +82,7 @@ module.exports.MifosLoanModel = (sequelize) => {
                 allowNull:true
             },
             isEqualAmortization:{
-                type:DataTypes.BOOLEAN,
+                type:DataTypes.STRING,
                 allowNull:true
             },
             interestType:{
@@ -94,7 +94,7 @@ module.exports.MifosLoanModel = (sequelize) => {
                 allowNull:true
             },
             allowPartialPeriodInterestCalcualtion:{
-                type:DataTypes.INTEGER,
+                type:DataTypes.STRING,
                 allowNull:true
             },
             transactionProcessingStrategyId:{
@@ -121,7 +121,7 @@ module.exports.MifosLoanModel = (sequelize) => {
                 type:DataTypes.INTEGER,
                 allowNull:true
             },
-            loanType:{
+            productId:{
                 type:DataTypes.INTEGER,
                 allowNull:true
             },
@@ -162,7 +162,7 @@ module.exports.MifosLoanModel = (sequelize) => {
             // Other model options go here
             freezeTableName: true,
             //tableName: 'tablename',
-            timestamps: true,
+            timestamps: false,
         }
     );
 }
