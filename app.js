@@ -203,7 +203,7 @@ cron.schedule('*/1 * * * *', () => {
 								  officeId: response.data.officeId
 								},
 								{
-								  where: { clientId: response.data.clientId },
+								  where: { id: object.dataValues.id },
 								}
 							  );
 							  
