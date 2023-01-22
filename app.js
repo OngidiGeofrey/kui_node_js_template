@@ -95,13 +95,25 @@ console.log(`🐹 app listening on https://localhost:${configs.port}`);
 
 //scheduler
 
-cron.schedule('*/10 * * * *', () => {
+cron.schedule('*/1 * * * * ', () => {
+
+		//submit loans
 	
-	submit_loans();
+	submit_loans().then(async (response) => {
+
+		//approve loans
+
+		approve_loans().then(async (response) => {
+
+			//disburse loans
+			disburse_loans();
+	
+		});
+
+	});
 
   });
-
-  submit_loans= async (req, res, next) => {
+submit_loans= async (req, res, next) => {
 	try {
 
 		
@@ -109,6 +121,7 @@ cron.schedule('*/10 * * * *', () => {
 
 		//finds the current day e.g Saturday
 		var currentDay=new Date().toLocaleDateString('en-US', { weekday: 'long' });
+		console.log(currentDay)
 
 		//finds current date e.g 20th January 2023
 
@@ -122,7 +135,7 @@ cron.schedule('*/10 * * * *', () => {
 		//check if current day or current date is blacklisted
 		if(configs.non_working_days.includes(todayDate) || configs.non_working_days.includes(currentDay))
 		{
-			console.log("cron job will run on a working day")
+			console.log("Chamasoft will submit all awaiting loan(S) on a working day")
 
 		}
 		// scheduler runs in this block 
@@ -235,4 +248,113 @@ cron.schedule('*/10 * * * *', () => {
 	}
 };
 
+approve_loans=async (req,res,next) =>{
 
+try
+{
+			const todayDate = new Date().toLocaleDateString("en-GB", {
+				day: "numeric",
+				month: "long",
+				year: "numeric",
+			});
+			//console.log(todayDate)
+
+				// fetch all awaiting loans
+				
+			const pendingApproval_loans= await MifosLoan.findAll({
+					attributes:["loanId"],
+					where: {
+						loanStatus: configs.pendingStatus,
+					},
+					limit:10
+				})
+			var obj=[...pendingApproval_loans] ;
+				//console.log(obj.dataValues);
+	
+				// check if there exist pendingApproval  loans
+			if(obj.length!=0)
+				{
+					//iterate through an array
+					obj.forEach(async object =>{
+						// fetch loan items to be submitted to mifos
+					 const 	data={
+							locale:"en",
+							dateFormat:"dd MMMM yyyy",
+							approvedOnDate: todayDate,
+							expectedDisbursementDate:todayDate,
+							disbursementData:[],
+							note: configs.note,
+						}
+						console.log(data)
+	
+					//	submit loans to mifos
+						const url = `${configs.mifosUrl}/loans/${object.dataValues.loanId}?command=approve`;
+						await Axios({
+							method: "POST",
+							url: url,
+							httpsAgent: new https.Agent({ rejectUnauthorized: false }),
+							headers: {
+								"Fineract-Platform-TenantId": `${configs.mifosTenantId}`,
+								authorization: "Basic "+configs.mifosAdminTenantkey,
+							}
+							,
+							data: data,
+							
+						}).then(async (response) => {
+							if(response.status==200){
+	
+								console.log(response.data)
+							//update chamasoft db accordingly.
+							const MifosClient = await MifosLoan.update(
+								{
+								  loanStatus:configs.pendindDisbursementStatus,
+								},
+								{
+								  where: { loanId: object.dataValues.loanId },
+								}
+							  );
+							  
+							 console.log(MifosClient)
+							}
+							else
+							{
+								console.log("Loan Approval Failed!. Reasons for failures\n1. Loan already approved\n2. Timeout\3. Network issue")
+							}
+	
+							
+	
+						});
+						
+					})
+	
+				}
+	
+				else{
+					console.log(" No pendingApproval record(s) found. Will check again in 10 minutes")
+				}
+		
+
+
+
+
+
+
+
+ //console.log("approve loans started")
+}catch(err){
+	console.log(err)
+}
+
+}
+
+disburse_loans=async (req,res,next) =>{
+	try
+	{		
+	 //logic to disburse loans
+	console.log("disbursement started")
+	
+	}catch(err){
+		console.log(err)
+	}
+	
+	}
