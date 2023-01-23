@@ -151,6 +151,7 @@ submit_loans= async (req, res, next) => {
 					limit:10
 				})
 				var obj=[...awaiting_loans] ;
+				
 	
 				// check if there exist awaiting loans
 				if(obj.length!=0)

@@ -450,15 +450,28 @@ module.exports.make_loan_repayment = async (req, res, next) => {
 module.exports.loan_application = async (req, res, next) => {
 	try {
 		let data=req.body;
-
-
 		const clientId=req.body.clientId;
+		var currentDay=new Date().toLocaleDateString('en-US', { weekday: 'long' });
 		
 		const today = new Date().toLocaleDateString("en-GB", {
 			day: "numeric",
 			month: "long",
 			year: "numeric",
 		});
+	
+		//console.log(disbursement_date.getDay());
+		if(config.non_working_days.includes(currentDay)){
+			today.setDate(today.getDate() + 3);
+		}
+		//check if current day or current date is blacklisted
+		else if(config.non_working_days.includes(today) || config.non_working_days.includes(currentDay))
+		{
+			console.log("Chamasoft will submit all awaiting loan(S) on a working day");
+
+		}
+		else{
+
+//if(config.non_working_days.includes())
 		//"disbursementData":[],
 		const fundId=req.body.fundId;
 		const productId=req.body.productId;
@@ -530,6 +543,11 @@ module.exports.loan_application = async (req, res, next) => {
 			result: client_loan,//loan.data,
 		});
 		//}
+
+
+		}
+
+		
 	} catch (err) {
 		//console.log(err)
 		return next(err);
