@@ -49,7 +49,11 @@ module.exports.login = async (req, res, next) => {
 		});
 	} catch (err) {
 		console.log("err: ", err);
-		return next(err);
+		 res.json({
+			resCode:401,
+			status: "Authentication Failed",
+			message: "username or password is wrong",
+		});
 	}
 };
 

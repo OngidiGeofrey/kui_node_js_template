@@ -349,12 +349,114 @@ try
 }
 
 disburse_loans=async (req,res,next) =>{
-	try
-	{		
-	 //logic to disburse loans
-	console.log("disbursement started")
+	try {
+
+		
+		console.log(configs.non_working_days);
+
+		//finds the current day e.g Saturday
+		var currentDay=new Date().toLocaleDateString('en-US', { weekday: 'long' });
+		console.log(currentDay)
+
+		//finds current date e.g 20th January 2023
+
+		const todayDate = new Date().toLocaleDateString("en-GB", {
+			day: "numeric",
+			month: "long",
+			year: "numeric",
+		});
+		console.log(todayDate)
+
+		//check if current day or current date is blacklisted
+		if(configs.non_working_days.includes(todayDate) || configs.non_working_days.includes(currentDay))
+		{
+			console.log("Chamasoft will Disburse  all approved loan(S) on a working day")
+
+		}
+		// scheduler runs in this block 
+		else
+		{
+
+				// fetch all awaiting loans
+				
+				const pendingDisbursal_loans= await MifosLoan.findAll({
+					attributes:["accountNumber","loanId","paymentTypeId","principal"],
+					where: {
+						loanStatus: configs.pendindDisbursementStatus,
+					},
+					limit:10
+				})
+				var obj=[...pendingDisbursal_loans] ;
+				console.log(obj);
 	
-	}catch(err){
+				// check if there exist awaiting loans
+				if(obj.length!=0)
+				{
+					//iterate through an array
+					obj.forEach(async object =>{
+	
+						// fetch loan items to be submitted to mifos
+					 const 	data={
+						
+							accountNumber: object.dataValues.accountNumber,
+							actualDisbursementDate :todayDate,
+							dateFormat: "dd MMMM yyyy",
+							locale: "en",
+							paymentTypeId:object.dataValues.paymentTypeId,
+							transactionAmount:object.dataValues.principal
+							
+	
+						}
+						console.log(data)
+	
+					//	submit loans to mifos
+						const url = `${configs.mifosUrl}/loans/${object.dataValues.loanId}?command=disburse`;
+						await Axios({
+							method: "POST",
+							url: url,
+							httpsAgent: new https.Agent({ rejectUnauthorized: false }),
+							headers: {
+								"Fineract-Platform-TenantId": `${configs.mifosTenantId}`,
+								authorization: "Basic "+configs.mifosAdminTenantkey,
+							},
+							data: data,
+							
+						}).then(async (response) => {
+							if(response.status===200){
+	
+								console.log(response.data)
+	
+							//update chamasoft db accordingly.
+							const MifosClient = await MifosLoan.update(
+								{
+								  loanStatus:configs.disbursedStatus,
+								},
+								{
+								  where: { loanId: object.dataValues.loanId},
+								}
+							  );
+							  
+							 console.log(MifosClient)
+							}
+							else
+							{
+								console.log("Oops Error occured . Trying again after 10 minutes")
+							}
+	
+							
+	
+						});
+						
+					})
+	
+				}
+	
+				else{
+					console.log(" no awaitingDisbursement record(s) found")
+				}
+		}
+		
+		}catch(err){
 		console.log(err)
 	}
 	
