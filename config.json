@@ -18,7 +18,7 @@
     "pendindDisbursementStatus":"awaitingDisbursement",
     "disbursedStatus":"Disbursed",
     "non_working_days":["Saturday","Sunday","21 January 2023"],
-    "mifosAdminTenantkey":"Z2VvZnJleTowNzE3OTA3ODk4",
+    "mifosAdminTenantkey":"c3VwZXJhZG1pbjpta201QG5kYm94",
     "mifosPassword": "mkm5@ndbox",
     "note":"loan Approved successfully",
     "mifosUrl": "https://sandbox.mkmcapitalglobal.co.ke/fineract-provider/api/v1",
