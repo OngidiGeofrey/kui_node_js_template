@@ -95,7 +95,7 @@ console.log(`🐹 app listening on https://localhost:${configs.port}`);
 
 //scheduler
 
-cron.schedule('*/3 * * * * ', () => {
+cron.schedule('*/1 * * * * ', () => {
 
 		//submit loans
 	
