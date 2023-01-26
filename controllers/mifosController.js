@@ -662,3 +662,29 @@ module.exports.retrieve_client_profile = async (req, res, next) => {
 
 
 
+//retrieve client loan balances
+
+module.exports.client_loan_balance = async (req, res, next) => {
+	try {
+		//const accessToken = req.headers["access-token"];
+		const client_id=req.params.id;
+		const url = `${config.mifosUrl}/clients/${client_id}/accounts`;
+		await Axios({
+			method: "GET",
+			url: url,
+			headers: {
+				"Content-Type": "application/json",
+				"Fineract-Platform-TenantId": `${config.mifosTenantId}`,
+				Authorization: `Basic ${config.mifosAdminTenantkey}`,
+			},
+			httpsAgent: new https.Agent({ rejectUnauthorized: false })
+		}).then((response) => {
+			res.json({
+				status: "success",
+				result: response.data,
+			});
+		});
+	} catch (err) {
+		console.log (err);
+	}
+};
