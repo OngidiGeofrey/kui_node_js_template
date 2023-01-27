@@ -8,34 +8,34 @@ module.exports.MifosUserModel = (sequelize) => {
                 type: DataTypes.INTEGER,
                 primaryKey: true,
                 autoIncrement: true,
-                allowNull: false,
+                allowNull: true,
             },
             username: {
                 type: DataTypes.STRING,
-                allowNull: false,
+                allowNull: true,
             },
             userId: {
                 type: DataTypes.STRING,
-                allowNull: false,
+                allowNull: true,
             },
             clientId: {
                 type: DataTypes.STRING,
             },
             firstName:{
                 type:DataTypes.STRING,
-                allowNull:false
+                allowNull:true
             },
             lastName:{
                 type:DataTypes.STRING,
-                allowNull:false
+                allowNull:true
             },
             phoneNumber:{
                 type:DataTypes.STRING,
-                allowNull:false
+                allowNull:true
             },
             emailAddress:{
                 type:DataTypes.STRING,
-                allowNull:false,  
+                allowNull:true,  
             }
             
         },
