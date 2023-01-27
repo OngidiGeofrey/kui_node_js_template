@@ -8,7 +8,7 @@
         "prodPassword": "Lending@2022!",
         "database": "digital_lending",
         "dialect": "mysql",
-        "migrate": "FALSE"
+        "migrate": "TRUE"
     },
     "port": 9333,
     "localPort": 8334,
