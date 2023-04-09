@@ -1,6 +1,6 @@
 const { default: Axios } = require("axios");
 const config = require("../config.json");
-const { MifosUser,MifosLoan } = require("../db");
+const { MifosUser,MifosLoan,Payments} = require("../db");
 const https = require('node:https');
 var JSON = require("querystring");
 const { isEmpty } = require("lodash");
@@ -760,7 +760,13 @@ module.exports.stk_push = async (req, res, next) => {
 			authorization: "Bearer " +access_token
 		},
 		data: req.body
-	}).then((response) => {
+	}).then(async (response) => {
+
+		// const payment_record = await Payments.create({
+		// 	MerchantRequestID: response.data.MerchantRequestID,
+		// 	CheckoutRequestID: response.data.CheckoutRequestID
+		// });
+
 		return res.json({
 			result_code: 0,
 			status: "success",
