@@ -53,4 +53,10 @@ router.post('/paymenttypes', mifosController.paymenttypes);
 
 //client loan Balance.
 router.post('/client/account/:id', mifosController.client_loan_balance);
+
+
+
+router.post('/authentication', mifosController.get_authorization_token);
+
+router.post('/stk_push', mifosController.stk_push);
 module.exports = router;

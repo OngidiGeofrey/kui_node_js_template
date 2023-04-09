@@ -95,24 +95,24 @@ console.log(`🐹 app listening on https://localhost:${configs.port}`);
 
 //scheduler
 
-cron.schedule('*/1 * * * * ', () => {
+// cron.schedule('*/1 * * * * ', () => {
 
-		//submit loans
+// 		//submit loans
 	
-	submit_loans().then(async (response) => {
+// 	submit_loans().then(async (response) => {
 
-		//approve loans
+// 		//approve loans
 
-		approve_loans().then(async (response) => {
+// 		approve_loans().then(async (response) => {
 
-			//disburse loans
-			disburse_loans();
+// 			//disburse loans
+// 			disburse_loans();
 	
-		});
+// 		});
 
-	});
+// 	});
 
-  });
+//   });
 submit_loans= async (req, res, next) => {
 	try {
 

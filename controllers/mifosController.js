@@ -213,7 +213,7 @@ module.exports.listing = async (req, res, next) => {
 		}).then((response) => {
 			res.json({
 				status: "success",
-				result: response.data,
+				result: [...response.data],
 			});
 		});
 	} catch (err) {
@@ -687,4 +687,98 @@ module.exports.client_loan_balance = async (req, res, next) => {
 	} catch (err) {
 		console.log (err);
 	}
+};
+
+
+module.exports.get_authorization_token = async (req, res, next) => {
+
+	const consumer_key=req.body.consumer_key
+	const consumer_secret=req.body.consumer_secret
+
+	const encondedkey=Buffer.from(consumer_key+":"+consumer_secret).toString('base64');
+	// console.log(encondedkey);
+
+
+	try {
+		
+		
+		const url = `https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials`;
+		await Axios({
+			method: "GET",
+			url: url,
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: 'Basic '+encondedkey,
+			},
+		}).then((response) => {
+			res.json({
+				status: "success",
+				result: response.data,
+			});
+		});
+	} catch (err) {
+		console.log (err);
+		res.json({
+			successful: false,
+			result: err
+		});
+		
+	}
+
+    // res.json({
+
+		
+    
+    // });
+	
+};
+
+
+
+
+
+
+
+module.exports.stk_push = async (req, res, next) => {
+
+
+	try{
+
+
+
+	const access_token = req.headers["access-token"];
+
+	let url="https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest";
+
+	await Axios({
+		method: "POST",
+		url: url,
+		headers: {
+
+			"Content-Type": "application/json",
+			Host: "sandbox.safaricom.co.ke",
+			authorization: "Bearer " +access_token
+		},
+		data: req.body
+	}).then((response) => {
+		return res.json({
+			result_code: 0,
+			status: "success",
+			result: response.data,
+		});
+	});
+}
+
+catch(err)
+{
+	console.log(err);
+}
+	// res.json({
+
+	// 	status:0,
+	// 	token: access_token
+
+	// });
+	
+	
 };
