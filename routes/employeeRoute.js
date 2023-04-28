@@ -15,8 +15,8 @@ const {
 } = require("../middlewares/employeeMiddleware");
  
 
-const mifosController = require('../controllers/employeeController');
-router.get('/',mifosController.listing);
+const employeeController = require('../controllers/employeeController');
+router.get('/',employeeController.listing);
 //loan products listing 
  
 module.exports = router;
