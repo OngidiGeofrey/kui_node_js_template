@@ -40,9 +40,9 @@ app.get('/', (req, res, next) => {
 
 // const taskRoute = require('./routes/taskRoute');
 // const userRoute = require('./routes/userRoute');
-const mifosRoute = require('./routes/mifosRoute');
+const mifosRoute = require('./routes/employeeRoute');
 const { config } = require('dotenv');
-app.use('/api', [ mifosRoute]); // you can add more routes in this array
+app.use('/api/v1/employee', [ mifosRoute]); // you can add more routes in this array
 
 
 //404 error

@@ -4,34 +4,11 @@
         "port": 3306,
         "user": "root",
         "password": "",
-        "prodUser": "digital_lending",
-        "prodPassword": "Lending@2022!",
-        "database": "digital_lending",
+        "database": "node_mysql_crud",
         "dialect": "mysql",
-        "migrate": "FALSE"
+        "migrate": "false"
     },
-    "port": 9333,
-    "localPort": 8334,
-    "mifosUsername": "superadmin",
-    "awaitingStatus":"awaiting",
-    "pendingStatus":"pendingApproval",
-    "pendindDisbursementStatus":"awaitingDisbursement",
-    "disbursedStatus":"Disbursed",
-    "non_working_days":["Saturday","Sunday","21 January 2023"],
-    "mifosAdminTenantkey":"c3VwZXJhZG1pbjpta201QG5kYm94",
-    "mifosPassword": "mkm5@ndbox",
-    "note":"loan Approved successfully",
-    "mifosUrl": "https://sandbox.mkmcapitalglobal.co.ke/fineract-provider/api/v1",
-    "mifosTenantId":"mkmsandbox",
-    "clientURL": "https://lending-api.sandbox.co.ke:8333",
-    "authSecret": "SilenceIsGolden",
-    "emailFrom": "project@digitalvisionea.com",
-    "smtpOptions": {
-        "host": "rcentral508.webserversystems.com",
-        "port": 465,
-        "auth": {
-            "user": "project@digitalvisionea.com",
-            "pass": "lkm@2020!"
-        }
-    }
+    "localPort": 5000,
+    "port":9333
+     
 }
