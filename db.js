@@ -50,6 +50,10 @@ const employee = Employee(sequelize);
 const { User } = require("./models/UserModel");
 const user = User(sequelize);
 
+const { Department } = require("./models/DepartmentModel");
+const department = Department(sequelize);
+
+
 
 const migrateDb = process.env.MIGRATE_DB || configs.database.migrate;
 if (migrateDb == "TRUE") {
@@ -61,5 +65,6 @@ sequelize.sync({force:false,alter:true}).then(() => {
 
 module.exports = {
 	Employee,
-	User
+	User,
+	Department
 };
