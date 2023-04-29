@@ -47,6 +47,9 @@ if(fs.existsSync('/etc/pki/tls/private/digitallending.chamasoft.com.key')) {
 const { Employee } = require("./models/EmployeeModel");
 const employee = Employee(sequelize);
 
+const { User } = require("./models/UserModel");
+const user = User(sequelize);
+
 
 const migrateDb = process.env.MIGRATE_DB || configs.database.migrate;
 if (migrateDb == "TRUE") {
@@ -57,5 +60,6 @@ sequelize.sync({force:false,alter:true}).then(() => {
 }
 
 module.exports = {
-	Employee
+	Employee,
+	User
 };
