@@ -53,6 +53,8 @@ const user = User(sequelize);
 const { Department } = require("./models/DepartmentModel");
 const department = Department(sequelize);
 
+const { Hostel } = require("./models/HostelModel");
+const hostel = Hostel(sequelize);
 
 
 const migrateDb = process.env.MIGRATE_DB || configs.database.migrate;
@@ -66,5 +68,6 @@ sequelize.sync({force:false,alter:true}).then(() => {
 module.exports = {
 	Employee,
 	User,
-	Department
+	Department,
+	Hostel,
 };
