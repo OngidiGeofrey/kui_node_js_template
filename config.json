@@ -6,7 +6,7 @@
         "password": "",
         "database": "node_mysql_crud",
         "dialect": "mysql",
-        "migrate": "FALSE"
+        "migrate": "TRUE"
     },
     "localPort": 5000,
     "port":9333
